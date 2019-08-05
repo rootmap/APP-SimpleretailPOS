@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:design="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_expense_create"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="match_parent"
+    tools:context=".DashboardActivity"
+    tools:ignore="NamespaceTypo">
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/grad_bg"
-    tools:context=".DashboardActivity">
+    android:layout_marginBottom="60dp"
+    android:padding="0dp"
+    android:id="@+id/customer_add_toolbar"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:orientation="vertical"
@@ -18,326 +28,332 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
-            <TextView
-                android:id="@+id/lblDashboard"
-                android:text="Dashboard"
-                android:textSize="22sp"
-                android:textColor="@color/white"
-                android:textFontWeight="800"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_below="@+id/lblDashboard"
-                android:text="Manage Account"
-                android:textSize="16sp"
-                android:textColor="#cccccc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="100dp"
+    android:textAlignment="center"
+    android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/logged_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/img_profile_pic"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="62dp"
-                android:layout_marginBottom="22dp"
-                android:text="Manage Account"
-                android:textColor="#cccccc"
-                android:paddingRight="10dp"
-                android:textSize="16sp" />
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/img_profile_pic"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_simpleretail_launcher" />
+
+    <TextView
+        android:id="@+id/logged_user_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="center"
+        android:paddingRight="10dp"
+        android:text="Manage Account"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
 
 
-            <ImageView
-                android:id="@+id/img_profile_pic"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/ic_useravater"
-                android:layout_width="62dp"
-                android:layout_height="62dp" />
+
+</LinearLayout>
+
+
+
 
 
         </RelativeLayout>
 
-        <GridLayout
-            android:columnCount="2"
-            android:rowCount="3"
-            android:layout_marginTop="20dp"
-            android:alignmentMode="alignMargins"
-            android:columnOrderPreserved="false"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            android:background="#FFFFFF"></View>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:columnOrderPreserved="false"
+            android:rowCount="3">
 
             <androidx.cardview.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/dashboard_pos"
                 android:layout_width="wrap_content"
+                android:clickable="true"
                 android:layout_height="wrap_content"
-
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:id="@+id/card_view"
+                android:layout_columnWeight="1"
                 android:layout_gravity="center"
-                android:layout_margin="12dp">
+                android:layout_margin="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
 
 
                 <LinearLayout
                     android:id="@+id/pos"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:gravity="center"
                     android:layout_width="135dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:src="@mipmap/ic_dashboard_pos"
-
                         android:layout_width="80dp"
-                        android:layout_height="80dp" />
+
+                        android:layout_height="80dp"
+                        android:src="@mipmap/ic_dashboard_pos" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#7F5BC5"></View>
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
-                        android:text="Cash Register"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Cash Register"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
 
             </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/card_view_two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:id="@+id/card_view_two"
+                android:clickable="true"
+                android:layout_columnWeight="1"
                 android:layout_gravity="center"
-                android:layout_margin="12dp">
+                android:layout_margin="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
 
 
                 <LinearLayout
                     android:id="@+id/dashboardCustomer"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:gravity="center"
                     android:layout_width="135dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:src="@mipmap/ic_dashboard_customer"
                         android:layout_width="80dp"
-                        android:layout_height="80dp" />
+                        android:layout_height="80dp"
+                        android:src="@mipmap/ic_dashboard_customer" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#7F5BC5"></View>
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Customer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
 
             </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/dashboard_customer_lead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
                 android:layout_gravity="center"
-                android:layout_margin="12dp">
+                android:layout_margin="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
 
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:gravity="center"
                     android:layout_width="135dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:src="@mipmap/ic_dashboard_customer_lead"
-
                         android:layout_width="80dp"
-                        android:layout_height="80dp" />
+
+                        android:layout_height="80dp"
+                        android:src="@mipmap/ic_dashboard_customer_lead" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#7F5BC5"></View>
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Customer Lead"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
 
             </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            app:cardElevation="6dp"
-            app:cardCornerRadius="12dp"
-            android:id="@+id/card_view_four"
-            android:layout_gravity="center"
-            android:layout_margin="12dp">
 
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:gravity="center"
-                android:layout_width="135dp"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:src="@mipmap/ic_dashboard_expense"
-
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-
-                <TextView
-                    android:layout_marginTop="12dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
-                    android:text="Expense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"/>
-
-            </LinearLayout>
-
-
-        </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/dashboard_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:id="@+id/card_view_five"
+                android:layout_columnWeight="1"
                 android:layout_gravity="center"
-                android:layout_margin="12dp">
+                android:layout_margin="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
 
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:gravity="center"
                     android:layout_width="135dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:src="@mipmap/ic_dashboard_inventory"
-
                         android:layout_width="80dp"
-                        android:layout_height="80dp" />
+
+                        android:layout_height="80dp"
+                        android:src="@mipmap/ic_dashboard_expense" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#7F5BC5"></View>
 
                     <TextView
-                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Expense"
+                        android:textAlignment="center"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/dashboard_inventory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
+
+
+                <LinearLayout
+                    android:layout_width="135dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="80dp"
+
+                        android:layout_height="80dp"
+                        android:src="@mipmap/ic_dashboard_inventory" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#7F5BC5"></View>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Inventory"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
 
             </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/dashboard_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:id="@+id/card_view_six"
+                android:layout_columnWeight="1"
                 android:layout_gravity="center"
-                android:layout_margin="12dp">
+                android:layout_margin="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
 
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:gravity="center"
                     android:layout_width="135dp"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <ImageView
-                        android:src="@mipmap/ic_dashboard_report"
                         android:layout_width="80dp"
-                        android:layout_height="80dp" />
+                        android:layout_height="80dp"
+                        android:src="@mipmap/ic_dashboard_report" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="#7F5BC5"></View>
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Reports"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
-
-                </LinearLayout>
-
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:id="@+id/card_view_seven"
-                android:layout_gravity="center"
-                android:layout_margin="12dp">
-
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:id="@+id/logout_dashboard"
-                    android:layout_width="135dp"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/ic_settings_power_black_24dp"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp" />
-
-                    <TextView
-                        android:layout_marginTop="12dp"
+                        android:textAlignment="center"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
-                        android:text="Logout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -348,5 +364,8 @@
 
     </LinearLayout>
 
-</ScrollView>
+</RelativeLayout>
 
+    <include layout="@layout/dashboard_bottom_menu"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

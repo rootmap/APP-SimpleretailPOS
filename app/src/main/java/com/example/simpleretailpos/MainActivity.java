@@ -77,11 +77,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tokenID=null;
         try {
-            //TokenUtils spre = new TokenUtils(this);
+            TokenUtils spre = new TokenUtils(this);
             tokenID=spre.getStr(spre.loggedAPIToken);
             if(tokenID!=null)
             {
-               spre.DashboardLink(MainActivity.this);
+                    //spre.DashboardLink(MainActivity.this);
+                    String redirect_login=spre.getStr("redirect_login");
+                    System.out.println("Redirect Login Status = "+redirect_login);
+                    if(redirect_login=="false")
+                    {
+                        spre.DashboardLink(MainActivity.this);
+                    }
             }
         }catch (Exception e){
 
@@ -209,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 token_type = jsonObject.getString("token_type");
                 access_token = jsonObject.getString("access_token");
                 refresh_token = jsonObject.getString("refresh_token");
-
+                spre.setStr("redirect_login","false");
                 //responseTextFromAPI.setText(access_token+" , "+refresh_token);
 
                 spre.setStr(spre.loggedAPIToken,access_token);

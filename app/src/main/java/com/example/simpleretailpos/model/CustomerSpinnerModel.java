@@ -10,7 +10,8 @@ public class CustomerSpinnerModel {
     private String last_invoice_no;
     private String created_at;
 
-
+    public CustomerSpinnerModel() {
+    }
 
     public CustomerSpinnerModel(Integer id, String name, String address, String phone, String email, String last_invoice_no, String created_at) {
         this.id = id;

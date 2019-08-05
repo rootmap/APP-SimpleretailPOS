@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home" android:id="@+id/bnm_report_home" android:icon="@drawable/ic_home_black_24dp" />
+    <item android:title="Sales" android:id="@+id/bnm_report_sales"  android:icon="@drawable/ic_shopping_cart_white" />
+    <item android:title="Profit"  android:id="@+id/bnm_report_profit"  android:icon="@drawable/ic_profit_white" />
+    <item android:title="Payment"  android:id="@+id/bnm_report_payment"  android:icon="@drawable/ic_payment_white" />
+    <item android:title="Expense"  android:id="@+id/bnm_expense_report_home"  android:icon="@drawable/ic_expense_white" />
+</menu>

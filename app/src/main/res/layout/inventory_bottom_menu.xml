@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:design="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="bottom"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/SimpleretailPOSThemeColor"
+        design:itemIconTint="@android:color/white"
+        android:id="@+id/NavBot"
+        design:itemTextColor="@android:color/white"
+        android:layout_gravity="bottom"
+        design:menu="@menu/inventory_menu" />
+
+</FrameLayout>

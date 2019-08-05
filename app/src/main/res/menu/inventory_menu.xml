@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home" android:id="@+id/bnm_inventory_home" android:icon="@drawable/ic_home_black_24dp" />
+    <item android:title="New Product" android:id="@+id/bnm_inventory_add"  android:icon="@drawable/ic_add_circle_outline_black_24dp" />
+    <item android:title="Product List"  android:id="@+id/bnm_inventory_list"  android:icon="@drawable/ic_view_list_black_24dp" />
+</menu>

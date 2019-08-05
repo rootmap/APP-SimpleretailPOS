@@ -14,7 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CustomerLeadActivity"></activity>
+        <activity android:name=".PosActivity"></activity>
+        <activity android:name=".SalesReportActivity" />
+        <activity android:name=".ReportActivity" />
+        <activity android:name=".ExpenseListActivity" />
+        <activity android:name=".ExpenseCreateActivity" />
+        <activity android:name=".InventoryListActivity" />
+        <activity android:name=".InventoryCreateActivity" />
+        <activity android:name=".CustomerLeadListActivity" />
+        <activity android:name=".CustomerLeadActivity" />
         <activity android:name=".CustomerListActivity" />
         <activity android:name=".CustomerAddActivity" />
         <activity android:name=".DashboardActivity" />

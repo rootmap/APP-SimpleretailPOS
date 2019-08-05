@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home" android:id="@+id/bnm_expense_home" android:icon="@drawable/ic_home_black_24dp" />
+    <item android:title="New Expense" android:id="@+id/bnm_expense_add"  android:icon="@drawable/ic_add_circle_outline_black_24dp" />
+    <item android:title="Expense List"  android:id="@+id/bnm_expense_list"  android:icon="@drawable/ic_view_list_black_24dp" />
+</menu>

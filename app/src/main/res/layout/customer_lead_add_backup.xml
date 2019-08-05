@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layoutMedicineSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_large"
+        android:orientation="vertical">
+
+        <com.satsuware.usefulviews.LabelledSpinner
+            android:id="@+id/spinnerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            app:labelText="Dengue Status" />
+
+        <!--<EditText-->
+        <!--android:id="@+id/autoCompleteShop"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:drawableStart="@mipmap/ic_search"-->
+        <!--android:drawableLeft="@mipmap/ic_search"-->
+        <!--android:hint="Write Medicine Name"-->
+        <!--android:textColorHint="@color/white"-->
+        <!--android:inputType="text"-->
+        <!--android:textSize="@dimen/medium_text"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:theme="@style/EditTextTheme">-->
+
+        <!--&lt;!&ndash;<requestFocus />&ndash;&gt;-->
+        <!--</EditText>-->
+
+        <LinearLayout
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:id="@+id/hidden_customer_id"
+                android:hint="customer ID"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_editText_height"
+            android:background="@drawable/medicine_shop_edittext"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnMedicineSearch"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:src="@drawable/ic_search"
+                tools:ignore="VectorDrawableCompat" />
+
+            <EditText
+                android:cursorVisible="true"
+                android:id="@+id/autoCompleteShop"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Search"
+                android:inputType="text"
+                android:paddingStart="3dp"
+                android:paddingLeft="3dp"
+                android:paddingEnd="3dp"
+                android:paddingRight="3dp"
+                android:text=""
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <include layout="@layout/medicine_search_frame" />
+
+
+    </FrameLayout>
+
+</LinearLayout>

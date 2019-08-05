@@ -36,6 +36,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         this.mData = mData;
     }
 
+
+
     /*public CustomerAdapter(Context context, ArrayList<String> imageNames, ArrayList<String> images , ArrayList<String> created ) {
         name = imageNames;
         phone = images;

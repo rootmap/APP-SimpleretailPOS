@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.simpleretailpos.R;
 import com.example.simpleretailpos.model.CustomerData;
+import com.example.simpleretailpos.model.CustomerSpinnerModel;
 import com.example.simpleretailpos.spinner.User;
 import java.util.ArrayList;
 import butterknife.BindView;
@@ -19,11 +20,11 @@ import butterknife.ButterKnife;
 public class NonOtcMedicineSuggestionAdapter extends RecyclerView.Adapter<NonOtcMedicineSuggestionAdapter.MedicineSuggestionHolder> {
 
     private Context context;
-    private ArrayList<User> products;
+    private ArrayList<CustomerSpinnerModel> newProducts;
 
-    public NonOtcMedicineSuggestionAdapter(Context context, ArrayList<User> products) {
+    public NonOtcMedicineSuggestionAdapter(Context context, ArrayList<CustomerSpinnerModel> newProducts) {
         this.context = context;
-        this.products = products;
+        this.newProducts = newProducts;
     }
 
     @NonNull
@@ -38,14 +39,16 @@ public class NonOtcMedicineSuggestionAdapter extends RecyclerView.Adapter<NonOtc
     @Override
     public void onBindViewHolder(@NonNull NonOtcMedicineSuggestionAdapter
             .MedicineSuggestionHolder medicineSuggestionHolder, int i) {
-        User product = products.get(i);
-        medicineSuggestionHolder.setValues(context, product);
+        CustomerSpinnerModel dd = newProducts.get(i);
+        medicineSuggestionHolder.setValues(context, dd);
     }
 
     @Override
     public int getItemCount() {
-        return this.products.size();
+        return this.newProducts.size();
     }
+
+
 
     class MedicineSuggestionHolder extends RecyclerView.ViewHolder {
 
@@ -63,13 +66,14 @@ public class NonOtcMedicineSuggestionAdapter extends RecyclerView.Adapter<NonOtc
 
 
 
-        void setValues(Context context, User product) {
+        void setValues(Context context, CustomerSpinnerModel newProducts) {
 
-            String name = product.getName();
-            String email = product.getEmail();
+            String name = newProducts.getName();
+            //String email = newProducts.getEmail();
             medicineName.setText(name);
 
 
         }
     }
+
 }

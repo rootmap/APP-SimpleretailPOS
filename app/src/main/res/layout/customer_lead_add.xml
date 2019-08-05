@@ -1,149 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentTop="true"
-    android:orientation="vertical">
+    android:id="@+id/layoutMedicineSearch"
+    android:padding="30dp">
 
-    <LinearLayout
-        android:id="@+id/layoutMedicineSearch"
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:id="@+id/txt_customer_id"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_large"
-        android:layout_marginLeft="@dimen/margin_large"
-        android:layout_marginTop="@dimen/margin_large"
-        android:layout_marginEnd="@dimen/margin_large"
-        android:layout_marginRight="@dimen/margin_large"
-        android:orientation="vertical">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:hintTextAppearance="@style/EditTextTheme"
+        app:boxStrokeColor="@color/colorPrimary"
+        app:hintAnimationEnabled="true"
+        android:textColorHint="@color/colorPrimary">
 
-        <!--<EditText-->
-        <!--android:id="@+id/autoCompleteShop"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:drawableStart="@mipmap/ic_search"-->
-        <!--android:drawableLeft="@mipmap/ic_search"-->
-        <!--android:hint="Write Medicine Name"-->
-        <!--android:textColorHint="@color/white"-->
-        <!--android:inputType="text"-->
-        <!--android:textSize="@dimen/medium_text"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:theme="@style/EditTextTheme">-->
 
-        <!--&lt;!&ndash;<requestFocus />&ndash;&gt;-->
-        <!--</EditText>-->
 
-        <LinearLayout
-            android:visibility="gone"
+        <EditText
+            android:id="@+id/autoCompleteShop"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <EditText
-                android:layout_width="match_parent"
-                android:id="@+id/hidden_customer_id"
-                android:hint="customer ID"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Select Customer"
+            android:theme="@style/EditTextTheme"
+            android:drawableRight="@drawable/ic_arrow_drop_down_primary_24dp"
+            android:drawableLeft="@drawable/ic_search_primary_24dp"
+            android:inputType="text"
+            android:textSize="20sp" />
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/frmCustomerList"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_editText_height"
-            android:background="@drawable/medicine_shop_edittext"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/btnMedicineSearch"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginLeft="@dimen/margin_small"
-                android:layout_marginTop="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:layout_marginRight="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_medium"
-                android:src="@drawable/ic_search"
-                tools:ignore="VectorDrawableCompat" />
+            <include layout="@layout/medicine_search_frame" />
 
-            <EditText
-                android:cursorVisible="true"
-                android:id="@+id/autoCompleteShop"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:layout_marginRight="@dimen/margin_medium"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:hint="Search"
-                android:inputType="text"
-                android:paddingStart="3dp"
-                android:paddingLeft="3dp"
-                android:paddingEnd="3dp"
-                android:paddingRight="3dp"
-                android:text=""
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp" />
 
-        </LinearLayout>
+        </FrameLayout>
 
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:hintTextAppearance="@style/EditTextTheme"
+        app:boxStrokeColor="@color/colorPrimary"
+        app:hintAnimationEnabled="true"
+        android:textColorHint="@color/colorPrimary">
+
+        <EditText
+            android:id="@+id/txt_customer_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Address"
+            android:theme="@style/EditTextTheme"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:hintTextAppearance="@style/EditTextTheme"
+        app:boxStrokeColor="@color/colorPrimary"
+        app:hintAnimationEnabled="true"
+        android:textColorHint="@color/colorPrimary">
+
+        <EditText
+            android:id="@+id/txt_customer_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Phone"
+            android:theme="@style/EditTextTheme"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:hintTextAppearance="@style/EditTextTheme"
+        app:boxStrokeColor="@color/colorPrimary"
+        app:hintAnimationEnabled="true"
+        android:textColorHint="@color/colorPrimary">
+
+        <EditText
+            android:id="@+id/txt_customer_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Email Address"
+            android:theme="@style/EditTextTheme"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:hintTextAppearance="@style/EditTextTheme"
+        app:boxStrokeColor="@color/colorPrimary"
+        app:hintAnimationEnabled="true"
+        android:textColorHint="@color/colorPrimary">
+
+        <EditText
+            android:id="@+id/txt_customer_lead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Customer Lead"
+            android:theme="@style/EditTextTheme"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    <!--<RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender : "
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp" />
+
+    </RadioGroup>-->
+
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_save_customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  Save"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_primary"
+            android:drawableLeft="@drawable/ic_save_black_24dp"
+            android:pointerIcon="hand"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginRight="20dp"/>
+
+        <Button
+            android:id="@+id/btn_reset_customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  Cancel"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_primary"
+            android:drawableLeft="@drawable/ic_cancel_black_24dp"
+            android:pointerIcon="hand"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" />
 
     </LinearLayout>
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:orientation="vertical">
-
-            <!--<Button-->
-            <!--android:visibility="gone"-->
-            <!--android:id="@+id/btnMedicineSearch"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="@dimen/margin_xxxl"-->
-            <!--android:layout_marginLeft="@dimen/margin_xxxl"-->
-            <!--android:layout_marginTop="@dimen/margin_large"-->
-            <!--android:layout_marginEnd="@dimen/margin_xxxl"-->
-            <!--android:layout_marginRight="@dimen/margin_xxxl"-->
-            <!--android:background="@color/colorPrimary"-->
-            <!--android:gravity="center"-->
-            <!--android:paddingStart="@dimen/margin_large"-->
-            <!--android:paddingLeft="@dimen/margin_large"-->
-            <!--android:paddingEnd="@dimen/margin_large"-->
-            <!--android:paddingRight="@dimen/margin_large"-->
-            <!--android:text="Search"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:textColor="#fff"-->
-            <!--android:textSize="@dimen/medium_text" />-->
-
-<!--            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:src="@mipmap/bg_medicine" />-->
-
-            <!--<FrameLayout-->
-            <!--android:id="@+id/frameShop"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:visibility="gone">-->
-
-            <!--<ProgressBar-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center" />-->
-            <!--</FrameLayout>-->
-
-
-        </LinearLayout>
-
-
-        <include layout="@layout/medicine_search_frame" />
-
-
-    </FrameLayout>
 
 </LinearLayout>
+

@@ -8,6 +8,8 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.simpleretailpos.listener.ClickListener;
+
 public class  RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
     private GestureDetector gestureDetector;

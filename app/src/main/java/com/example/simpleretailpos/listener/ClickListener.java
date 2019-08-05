@@ -1,4 +1,4 @@
-package com.example.simpleretailpos;
+package com.example.simpleretailpos.listener;
 
 import android.view.View;
 
