@@ -2,6 +2,7 @@ package com.example.simpleretailpos.model;
 
 public class CustomerData {
 
+    private Integer id;
     private String name;
     private String address;
     private String phone;
@@ -12,7 +13,8 @@ public class CustomerData {
     public CustomerData() {
     }
 
-    public CustomerData(String name, String address, String phone, String email, String last_invoice_no, String created_at) {
+    public CustomerData(Integer id, String name, String address, String phone, String email, String last_invoice_no, String created_at) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -20,6 +22,14 @@ public class CustomerData {
         this.last_invoice_no = last_invoice_no;
         this.created_at = created_at;
 
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getCreated_at() {

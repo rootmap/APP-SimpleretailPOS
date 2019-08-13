@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private String username;
     private String password;
 
-
+    //private ImageView pscsr;
     public String token_key="token_key";
     public String loggedUser="logged_user";
     TokenUtils tokenUtils;
@@ -81,13 +82,15 @@ public class MainActivity extends AppCompatActivity {
             tokenID=spre.getStr(spre.loggedAPIToken);
             if(tokenID!=null)
             {
-                    //spre.DashboardLink(MainActivity.this);
-                    String redirect_login=spre.getStr("redirect_login");
-                    System.out.println("Redirect Login Status = "+redirect_login);
-                    if(redirect_login=="false")
-                    {
-                        spre.DashboardLink(MainActivity.this);
-                    }
+
+                String redirect_login=spre.getStr("redirect_login");
+                System.out.println("Redirect Login Status = "+redirect_login);
+                if(redirect_login.equals("false"))
+                {
+                    spre.DashboardLink(MainActivity.this);
+                }
+
+                //spre.DashboardLink(MainActivity.this);
             }
         }catch (Exception e){
 
@@ -136,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
     }
+
+
 
 
 
@@ -185,12 +192,7 @@ public class MainActivity extends AppCompatActivity {
         }
         protected void onPreExecute(){
             super.onPreExecute();
-
-            //rellay1.setVisibility(View.VISIBLE);
-           // rellay2.setVisibility(View.INVISIBLE);
-
             Toast.makeText(MainActivity.this,"Processing please wait...",Toast.LENGTH_SHORT).show();
-
         }
 
         protected void onPostExecute(String s){
@@ -215,20 +217,22 @@ public class MainActivity extends AppCompatActivity {
                 token_type = jsonObject.getString("token_type");
                 access_token = jsonObject.getString("access_token");
                 refresh_token = jsonObject.getString("refresh_token");
-                spre.setStr("redirect_login","false");
+
                 //responseTextFromAPI.setText(access_token+" , "+refresh_token);
 
                 spre.setStr(spre.loggedAPIToken,access_token);
                 spre.setStr(spre.loggedAPIRefreshToken,refresh_token);
 
                 try {
-                    Toast.makeText(MainActivity.this,"Retriving user info....",Toast.LENGTH_SHORT).show();
+                    spre.setStr("redirect_login","false");
+                    spre.SetToast(MainActivity.this,"Retriving user info....");
+                    spre.SetToast(MainActivity.this,"Status for login redirect_login="+spre.getStr("redirect_login"));
                     new getLoggedUser().execute(token_type,access_token);
                 }catch(Exception e){
-                    Toast.makeText(MainActivity.this,"Authentication Failed, Please try again!.",Toast.LENGTH_SHORT).show();
+                    spre.SetToast(MainActivity.this,"Authentication Failed, Please try again!.");
                 }
             } catch (JSONException e) {
-                Toast.makeText(MainActivity.this,"Authentication Failed, Please try again.",Toast.LENGTH_SHORT).show();
+                spre.SetToast(MainActivity.this,"Authentication Failed, Please try again.");
             }
 
 

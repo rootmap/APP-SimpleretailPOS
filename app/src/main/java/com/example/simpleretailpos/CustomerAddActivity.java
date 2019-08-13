@@ -64,7 +64,7 @@ public class CustomerAddActivity extends AppCompatActivity {
 
 
         btnSaveCustomer = (Button)findViewById(R.id.btn_save_customer);
-        btn_reset_customer = (Button)findViewById(R.id.btn_reset_customer);
+        btn_reset_customer = (Button)findViewById(R.id.btn_reset_general_sales);
 
         txt_customer_name = (EditText)findViewById(R.id.txt_customer_name);
         txt_customer_address = (EditText)findViewById(R.id.txt_customer_address);

@@ -26,12 +26,15 @@ import com.example.simpleretailpos.ReportActivity;
 import com.example.simpleretailpos.SalesReportActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class TokenUtils {
@@ -41,29 +44,35 @@ public class TokenUtils {
         this.context = context;
     }
 
-    public final static String Api_baseUrl="http://10.102.162.128:8000";
+    public final static String Api_baseUrl="http://172.20.10.4:8000";
     public final static String Api_baseUrl_login=Api_baseUrl+"/api/login";
     public final static String Api_baseUrl_logged_user_info=Api_baseUrl+"/api/user";
     public final static String Api_customer_add=Api_baseUrl+"/api/customer/add";
+    public final static String Api_customer_add_return_id=Api_baseUrl+"/api/customer/return/id/add";
+
     public final static String Api_customer_list=Api_baseUrl+"/api/customer/list";
     public final static String Api_customer_lead=Api_baseUrl+"/api/customer/lead/save";
     public final static String Api_customer_lead_list=Api_baseUrl+"/api/customer/lead/list";
 
     public final static String Api_product_save=Api_baseUrl+"/api/product/save";
     public final static String Api_product_list=Api_baseUrl+"/api/product/list";
+    public final static String Api_product_by_category=Api_baseUrl+"/api/product/category/wise";
 
     public final static String Api_expense_head=Api_baseUrl+"/api/expense/head";
     public final static String Api_expense_save=Api_baseUrl+"/api/expense/voucher/save";
     public final static String Api_expense_list=Api_baseUrl+"/api/expense/voucher";
-
     public final static String Api_sales_report=Api_baseUrl+"/api/sales/report";
-
     public final static String Api_category=Api_baseUrl+"/api/category";
+
+    public final static String Api_pos_general_sales=Api_baseUrl+"/api/pos/general/sales/save";
+    public final static String Api_pos_payout=Api_baseUrl+"/api/pos/payout";
+
     public final static String loggedAPIToken = "access_token";
     public final static String loggedAPIRefreshToken = "refresh_token";
     public final static String loggedNameKey = "loggedNameKey";
     public final static String loggedStoreIDKey = "loggedStoreIDKey";
     public final static String PREFS_NAME = "appname_prefs";
+    public static Double DEFAULTDISCOUNTRATE = 0.00;
 
     public TextView responseTextFromAPI;
 
@@ -205,10 +214,76 @@ public class TokenUtils {
         Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
     }
 
+    public void triggerRefreshToken(){
+        new InitiateRefreshAPIToken().execute();
+    }
+
+    public class InitiateRefreshAPIToken extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("refresh_token",loggedAPIToken)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .url(Api_customer_add_return_id)
+                        .post(postData)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                String result = response.body().string();
+
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+
+        }
+
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+            System.out.println("Processing Refresh Token,  please wait...");
+
+        }
+
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            JSONObject row=perseJSONArray(s);
+            try {
+                String dft=row.getString("error");
+                System.out.println("Refresh Response = "+dft);
+                if(dft.equals("Unauthenticated.")){
+                    setStr("redirect_login","true");
+                    LoginLink(context);
+                }
+            } catch (JSONException e) {
+                System.out.println("Failed Refresh Response = "+row);
+            }
 
 
 
 
 
+        }
+    }
+
+    public void checkUnauthenticated(String s){
+        JSONObject row=perseJSONArray(s);
+        try {
+            String dft=row.getString("error");
+            System.out.println("Refresh Response = "+dft);
+            if(dft.equals("Unauthenticated.")){
+                setStr("redirect_login","true");
+                LoginLink(context);
+            }
+        } catch (JSONException e) {
+            System.out.println("Failed Refresh Response = "+row);
+        }
+    }
 
 }

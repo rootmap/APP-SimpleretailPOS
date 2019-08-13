@@ -2,29 +2,19 @@ package com.example.simpleretailpos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
-import com.example.simpleretailpos.adapter.NonOtcMedicineSuggestionAdapter;
-import com.example.simpleretailpos.listener.ClickListener;
 import com.example.simpleretailpos.model.CategoryData;
-import com.example.simpleretailpos.model.CustomerSpinnerModel;
 import com.example.simpleretailpos.neutrix.TokenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.satsuware.usefulviews.LabelledSpinner;
@@ -35,7 +25,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +58,7 @@ public class InventoryCreateActivity extends AppCompatActivity  implements Label
     @BindView(R.id.btn_save_customer)
     Button btn_save_customer;
 
-    @BindView(R.id.btn_reset_customer)
+    @BindView(R.id.btn_reset_general_sales)
     Button btn_reset_customer;
 
     @BindView(R.id.NavBot)

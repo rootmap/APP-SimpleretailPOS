@@ -73,7 +73,7 @@ public class CustomerLeadActivity extends AppCompatActivity {
     @BindView(R.id.btn_save_customer)
     Button btn_save_customer;
 
-    @BindView(R.id.btn_reset_customer)
+    @BindView(R.id.btn_reset_general_sales)
     Button btn_reset_customer;
 
     @BindView(R.id.frmCustomerList)

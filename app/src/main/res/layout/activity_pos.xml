@@ -34,37 +34,39 @@
 
         <RelativeLayout
             android:layout_margin="5dp"
+            android:gravity="top"
             android:background="@drawable/border_set"
             android:id="@+id/topMenu"
             android:layout_below="@+id/toolbar"
+
             android:layout_width="fill_parent"
             android:layout_height="match_parent">
-            <include layout="@layout/pos_bottom_menu"/>
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_below="@+id/topMenu"
-            android:layout_margin="10dp"
-            android:background="@color/white"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-
-            <ScrollView
-
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <!--<include layout="@layout/inventory_add_form"/>-->
-
-            </ScrollView>
-
+            <include layout="@layout/pos_top_menu"/>
         </RelativeLayout>
 
 
 
+        <include layout="@layout/pos_category_view" />
+        <include layout="@layout/pos_product_view" />
+
+
+
+        <ScrollView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/topMenu"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="118dp"
+            android:layout_alignLeft="@+id/topMenu">
+
+
+
+            <include layout="@layout/pos_cart_design" />
+
+            <!--<include layout="@layout/pos_shopping_cart_summary_recyler" />-->
+
+        </ScrollView>
 
 
 

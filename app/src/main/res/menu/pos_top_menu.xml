@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Category" android:id="@+id/topPosCategory" android:icon="@drawable/ic_category_white" />
+    <item android:title="General Sale" android:id="@+id/topPosGeneralSale" android:icon="@drawable/ic_tab_black_24dp" />
+    <item android:title="Payout" android:id="@+id/topPosPayout" android:icon="@drawable/ic_customer" />
+    <item android:title="Discount" android:id="@+id/topPosDiscount" android:icon="@drawable/ic_payment_white" />
+    <item android:title="Customer" android:id="@+id/topPosCustomer" android:icon="@drawable/ic_customer" />
+
+</menu>

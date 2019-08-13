@@ -10,12 +10,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:labelVisibilityMode="labeled"
+        android:fitsSystemWindows="true"
         android:background="@color/SimpleretailPOSThemeColor"
         design:itemIconTint="@android:color/white"
-        android:id="@+id/NavBot"
+        android:id="@+id/posTopNavBot"
         design:itemTextColor="@android:color/white"
         android:layout_gravity="bottom"
-        design:menu="@menu/pos_menu" />
+        app:labelVisibilityMode="labeled"
+        design:menu="@menu/pos_top_menu" />
 
 </FrameLayout>

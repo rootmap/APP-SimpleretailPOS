@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:drawableLeft="@drawable/ic_general_sale"
+                android:id="@+id/shoppingCart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:paddingLeft="10dp"
+                android:text=" Payout / Drop Detail"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="18sp"
+                android:padding="10dp"
+
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/payout_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/ic_close_white_24dp" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:hintTextAppearance="@style/EditTextTheme"
+            app:boxStrokeColor="@color/colorPrimary"
+            app:hintAnimationEnabled="true"
+            android:textColorHint="@color/colorPrimary">
+
+            <EditText
+                android:id="@+id/txt_payout_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Amount"
+                android:theme="@style/EditTextTheme"
+                android:inputType="text"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:hintTextAppearance="@style/EditTextTheme"
+            app:boxStrokeColor="@color/colorPrimary"
+            app:hintAnimationEnabled="true"
+            android:textColorHint="@color/colorPrimary">
+
+            <EditText
+                android:id="@+id/txt_payout_reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Reason"
+                android:theme="@style/EditTextTheme"
+                android:inputType="text"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:layout_marginTop="40dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_save_payout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  Save"
+                android:textSize="18sp"
+                android:textColor="#ffffff"
+                android:background="@drawable/button_primary"
+                android:drawableLeft="@drawable/ic_save_black_24dp"
+                android:pointerIcon="hand"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_marginRight="20dp"/>
+            <Button
+                android:id="@+id/btn_reset_payout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  Clear"
+                android:textSize="18sp"
+                android:textColor="#ffffff"
+                android:background="@drawable/button_primary"
+                android:drawableLeft="@drawable/ic_cancel_black_24dp"
+                android:pointerIcon="hand"
+                android:layout_alignParentRight="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

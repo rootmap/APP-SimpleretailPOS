@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import com.example.simpleretailpos.model.CategoryData;
 import com.example.simpleretailpos.model.ExpenseHead;
 import com.example.simpleretailpos.neutrix.TokenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -58,7 +57,7 @@ public class ExpenseCreateActivity extends AppCompatActivity implements Labelled
     @BindView(R.id.btn_save_customer)
     Button btn_save_customer;
 
-    @BindView(R.id.btn_reset_customer)
+    @BindView(R.id.btn_reset_general_sales)
     Button btn_reset_customer;
 
     @BindView(R.id.NavBot)
