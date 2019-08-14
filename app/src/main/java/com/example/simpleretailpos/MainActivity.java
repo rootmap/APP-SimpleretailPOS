@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-
+            System.out.println(s);
             JSONObject jsonObject = spre.perseJSONArray(s);
             //responseTextFromAPI.setText("Perse Success = "+jsonObject.toString());
             //spre.setStr("userJson",s);
@@ -290,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
                 spre.setStr(spre.loggedNameKey,Loggedname);
                 spre.setStr(spre.loggedStoreIDKey,store_id);
+                spre.setStr(spre.loggedUserData,s);
 
                 spre.DashboardLink(MainActivity.this);
 

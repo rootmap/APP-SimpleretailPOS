@@ -65,7 +65,7 @@
         android:textColorHint="@color/colorPrimary">
 
         <EditText
-            android:id="@+id/txt_product_name"
+            android:id="@+id/txt_new_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

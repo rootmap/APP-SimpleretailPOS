@@ -46,6 +46,8 @@ public class TokenUtils {
 
     public final static String Api_baseUrl="http://172.20.10.4:8000";
     public final static String Api_baseUrl_login=Api_baseUrl+"/api/login";
+    public final static String Api_baseUrl_logout=Api_baseUrl+"/api/logout";
+    public final static String Api_baseUrl_change_password=Api_baseUrl+"/api/change/password";
     public final static String Api_baseUrl_logged_user_info=Api_baseUrl+"/api/user";
     public final static String Api_customer_add=Api_baseUrl+"/api/customer/add";
     public final static String Api_customer_add_return_id=Api_baseUrl+"/api/customer/return/id/add";
@@ -71,6 +73,7 @@ public class TokenUtils {
     public final static String loggedAPIRefreshToken = "refresh_token";
     public final static String loggedNameKey = "loggedNameKey";
     public final static String loggedStoreIDKey = "loggedStoreIDKey";
+    public final static String loggedUserData = "loggedUserData";
     public final static String PREFS_NAME = "appname_prefs";
     public static Double DEFAULTDISCOUNTRATE = 0.00;
 

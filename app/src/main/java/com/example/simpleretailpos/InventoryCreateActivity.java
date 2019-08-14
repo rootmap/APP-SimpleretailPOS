@@ -42,7 +42,7 @@ public class InventoryCreateActivity extends AppCompatActivity  implements Label
     @BindView(R.id.txt_barcode)
     EditText txt_barcode;
 
-    @BindView(R.id.txt_product_name)
+    @BindView(R.id.txt_new_password)
     EditText txt_product_name;
 
 

@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.graphics.Movie;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -44,8 +42,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,8 +50,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static android.view.Gravity.CENTER_HORIZONTAL;
 
 public class PosActivity extends AppCompatActivity  implements LabelledSpinner.OnItemChosenListener  {
     private ImageView pscsr;
@@ -722,7 +716,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
         builder.setView(dialogView);
 
-        final ImageView general_close = (ImageView) dialogView.findViewById(R.id.general_close);
+        final ImageView general_close = (ImageView) dialogView.findViewById(R.id.change_password_close);
         general_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -730,9 +724,9 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
             }
         });
 
-        final Button btn_save_product = (Button) dialogView.findViewById(R.id.btn_save_product);
-        final EditText txt_product_name = (EditText) dialogView.findViewById(R.id.txt_product_name);
-        final EditText txt_sold_price = (EditText) dialogView.findViewById(R.id.txt_sold_price);
+        final Button btn_save_product = (Button) dialogView.findViewById(R.id.btn_save_password);
+        final EditText txt_product_name = (EditText) dialogView.findViewById(R.id.txt_new_password);
+        final EditText txt_sold_price = (EditText) dialogView.findViewById(R.id.txt_retypepassword);
         final EditText txt_cost_price = (EditText) dialogView.findViewById(R.id.txt_cost_price);
         final EditText txt_description = (EditText) dialogView.findViewById(R.id.txt_description);
         final Button btn_reset_general_sales = (Button) dialogView.findViewById(R.id.btn_reset_general_sales);
