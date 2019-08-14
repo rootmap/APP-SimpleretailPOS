@@ -39,14 +39,14 @@
             android:layout_height="wrap_content">
 
 
-            <ScrollView
+            <LinearLayout
 
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
                 <include layout="@layout/inventory_add_form"/>
 
-            </ScrollView>
+            </LinearLayout>
 
         </RelativeLayout>
 

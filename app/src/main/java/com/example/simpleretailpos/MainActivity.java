@@ -2,6 +2,7 @@ package com.example.simpleretailpos;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             try {
+                System.out.println("API triggering for login simpleretail pos");
                 //Toast.makeText(MainActivity.this,params.toString(),Toast.LENGTH_SHORT).show();
                 String Email=params[0];
                 String Password=params[1];
@@ -179,8 +181,15 @@ public class MainActivity extends AppCompatActivity {
                         .post(postData)
                         .build();
 
-                Response response = client.newCall(request).execute();
-                String result = response.body().string();
+                String result=null;
+
+                try {
+                    Response response = client.newCall(request).execute();
+                    result = response.body().string();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
 
                 return result;
 
@@ -191,12 +200,16 @@ public class MainActivity extends AppCompatActivity {
 
         }
         protected void onPreExecute(){
+            System.out.println("API On Process for login simpleretail pos");
             super.onPreExecute();
             Toast.makeText(MainActivity.this,"Processing please wait...",Toast.LENGTH_SHORT).show();
         }
 
         protected void onPostExecute(String s){
+
             super.onPostExecute(s);
+
+            System.out.println("API gor response  for login simpleretail pos "+s);
 
             //responseTextFromAPI.setText(s);
 
@@ -230,9 +243,11 @@ public class MainActivity extends AppCompatActivity {
                     new getLoggedUser().execute(token_type,access_token);
                 }catch(Exception e){
                     spre.SetToast(MainActivity.this,"Authentication Failed, Please try again!.");
+                    spre.LoginLink(MainActivity.this);
                 }
             } catch (JSONException e) {
                 spre.SetToast(MainActivity.this,"Authentication Failed, Please try again.");
+                spre.LoginLink(MainActivity.this);
             }
 
 
