@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Drawer" android:icon="@drawable/ic_tab_black_24dp" />
-
-
-    <item android:title="Make Payment" android:icon="@drawable/ic_payment_white" />/
-
-    <item android:title="Complete Sales" android:icon="@drawable/ic_settings_black_24dp" />
+    <item android:title="Drawer" android:id="@+id/btn_pos_drawer" android:icon="@drawable/ic_tab_black_24dp" />
+    <item android:title="Make Payment" android:id="@+id/btn_pos_makepayment"  android:icon="@drawable/ic_payment_white" />/
+    <item android:title="Clear POS" android:id="@+id/btn_pos_clear_sales"  android:icon="@drawable/ic_clear_white" />
 
 </menu>

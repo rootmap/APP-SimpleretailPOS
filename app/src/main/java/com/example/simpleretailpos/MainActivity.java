@@ -170,6 +170,9 @@ public class MainActivity extends AppCompatActivity {
                 //Utils.saveSharedPreferences(MainActivity.this,new Login(Email, Password,null));
                 OkHttpClient client = new OkHttpClient();
 
+                System.out.println("Username : "+Email);
+                System.out.println("Password : "+Password);
+
                 RequestBody postData = new FormBody.Builder()
                         .add("username",Email)
                         .add("password",Password)
@@ -195,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }catch (Exception ex){
+                ex.printStackTrace();
                 return null;
             }
 

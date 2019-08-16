@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,16 +35,23 @@ import com.example.simpleretailpos.model.CustomerData;
 import com.example.simpleretailpos.model.InventoryData;
 import com.example.simpleretailpos.model.PosItem;
 import com.example.simpleretailpos.listener.RecyclerTouchListener;
+import com.example.simpleretailpos.model.TenderModel;
 import com.example.simpleretailpos.neutrix.TokenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +66,9 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
     @BindView(R.id.posTopNavBot)
     BottomNavigationView posTopNavBot;
+
+    @BindView(R.id.NavBotPosBottom)
+    BottomNavigationView NavBotPosBottom;
 
     @BindView(R.id.posCategoryWindow)
     LinearLayout posCategoryWindow;
@@ -105,12 +118,18 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     private Integer discountType=0;
 
     private List<String> customerArray = new ArrayList<>();
+    private List<String> paymentShortArray = new ArrayList<>();
+    private List<TenderModel> paymentDataArray = new ArrayList<>();
     private Integer customerID=0;
     private Integer customerPositionID=0;
     private List<CustomerData> custData;
     private List<PosItem> posItemsData;
     private Double discuntRate=spre.DEFAULTDISCOUNTRATE;
     private Context context;
+
+    private Integer paymentPositionID=0;
+    private Integer paymentID=0;
+    private Integer DrawerStatus=0;
 
 
     @Override
@@ -126,27 +145,14 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         posDiscount = findViewById(R.id.posDiscount);
         posNetPayable = findViewById(R.id.posNetPayable);
         custData = new ArrayList<>();
-        /*new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                checkNSum();
-            }
-        }, 0, 2000);*/
-
         catData = new ArrayList<>();
         catData.clear();
-
         proData = new ArrayList<>();
         proData.clear();
-
         posItemsData = new ArrayList<>();
-
-       // spre.triggerRefreshToken();
-
         pos_category_recyclerv_view = findViewById(R.id.pos_category_recyclerv_view);
         pos_product_recyclerv_view = findViewById(R.id.pos_product_recyclerv_view);
         posCartDesignRecView = findViewById(R.id.posCartDesignRecView);
-
         posTopNavBot=findViewById(R.id.posTopNavBot);
         posTopNavBot.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -174,8 +180,121 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 return false;
             }
         });
+        String posNetAble=posSubtotal.getText().toString();
+        String netPayable = posNetAble.replace("$","");
+        Double netPayableAmount = Double.parseDouble(netPayable);
+        NavBotPosBottom=findViewById(R.id.NavBotPosBottom);
+        NavBotPosBottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+                    case R.id.btn_pos_drawer:
+                        //toggleCategoryView();
+
+                        return true;
+                    case R.id.btn_pos_makepayment:
+                        showTender();
+                        return true;
+                    case R.id.btn_pos_clear_sales:
+                        clearShoppingCart();
+                        spre.SetToast(actContext,"Shopping cart is cleared.");
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
+        checkDrawerStatus();
 
     }
+
+    /*Drawer Status Start*/
+    private void checkDrawerStatus() {
+        new getDrawerData().execute();
+    }
+    public class getDrawerData extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String getLoggedToken=spre.getStr(spre.loggedAPIToken);
+                TokenUtils spre = new TokenUtils(actContext);
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .addHeader("Authorization", "Bearer "+getLoggedToken)
+                        .url(spre.Api_customer_list)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                String result = response.body().string();
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            spre.checkUnauthenticated(s);
+            System.out.println("Get customer = "+s);
+            try {
+                spre.SetToast(actContext,"Please wait, Loading...");
+                JSONObject jsonObject=spre.perseJSONArray(s);
+                String data =null;
+                data=jsonObject.getString("data");
+                System.out.println("Parse Successful = "+data);
+                JSONArray dataObject=new JSONArray(data);
+                System.out.println("Array Length = "+dataObject.length());
+                JSONObject row = null;
+                custData.clear();
+                CustomerData dataRows = new CustomerData();
+                dataRows.setId(900000000);
+                dataRows.setName("Select Customer");
+                custData.add(dataRows);
+
+                dataRows.setId(900000001);
+                dataRows.setName("Add New Customer");
+                custData.add(dataRows);
+
+                dataRows.setId(900000002);
+                dataRows.setName("No Customer");
+                custData.add(dataRows);
+
+                for(int i=0; i<=dataObject.length(); i++){
+                    //System.out.println("JSON Sinle Array = "+dataObject.getJSONObject(i));
+                    try {
+
+                        row=dataObject.getJSONObject(i);
+
+
+                        String nnm=row.getString("name").toString();
+                        if(nnm.equals("No Customer")) {
+
+                        }
+                        else
+                        {
+                            CustomerData dataRow = new CustomerData();
+                            dataRow.setId(row.getInt("id"));
+                            dataRow.setName(row.getString("name"));
+
+                            custData.add(dataRow);
+                            customerArray.add(row.getString("name"));
+                        }
+                    }catch (Exception e){
+                        System.out.println("Failed to prase jsonARRAY"+dataObject.length());
+                    }
+                }
+            }catch (Exception e){
+                System.out.println("Json SPLITER Failed"+s);
+            }
+        }
+    }
+    /*Drawer Status Start*/
+
 
     /* Customer Start */
     public Boolean validateCustomer(String txt_customer_name, String txt_customer_address,String txt_customer_phone, String txt_customer_email){
@@ -549,6 +668,31 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         discountType = 0;
                     }
                     break;
+
+                case R.id.txt_payment_id:
+                    System.out.println("Payment Item Chosen = "+position);
+
+                    alertDialog.findViewById(R.id.txt_netPayable_name).setVisibility(View.GONE);
+                    alertDialog.findViewById(R.id.txt_Amount_paid).setVisibility(View.GONE);
+                    alertDialog.findViewById(R.id.txt_due_amount).setVisibility(View.GONE);
+                    alertDialog.findViewById(R.id.txt_change_return_amount).setVisibility(View.GONE);
+
+                    if (position == 0) {
+                        paymentID = 0;
+                        paymentPositionID=position;
+
+
+
+                    }  else {
+                        paymentID = paymentDataArray.get(position).getTenderID();
+                        paymentPositionID=position;
+
+                        alertDialog.findViewById(R.id.txt_netPayable_name).setVisibility(View.VISIBLE);
+                        alertDialog.findViewById(R.id.txt_Amount_paid).setVisibility(View.VISIBLE);
+                        alertDialog.findViewById(R.id.txt_due_amount).setVisibility(View.VISIBLE);
+                        alertDialog.findViewById(R.id.txt_change_return_amount).setVisibility(View.VISIBLE);
+                    }
+                    break;
                 // If you have multiple LabelledSpinners, you can add more cases here
             }
         }
@@ -856,8 +1000,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     }
     /* General Sales End  */
 
-
-
     public void showPopupMenu(View view, Integer position){
 
 
@@ -1095,7 +1237,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         }));*/
         productAdapter.notifyDataSetChanged();
     }
-
     /*Product Load End*/
 
     /* checking data start */
@@ -1188,8 +1329,338 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     }
     /* Load cart sumTotal End */
 
+    /* Payment method Start */
+    public void showTender(){
+        Date cDate = new Date();
+        String invoiceID = new SimpleDateFormat("yyyyMMddHms").format(cDate);
+        System.out.println("Customer ID initiated = "+customerID);
+        LayoutInflater layoutInflater = LayoutInflater.from(actContext);
+        View dialogView = layoutInflater.inflate(R.layout.pos_payment_type, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
+        builder.setView(dialogView);
+        LabelledSpinner spinnerStatus = dialogView.findViewById(R.id.txt_payment_id);
+        if(paymentPositionID>0){
+            spinnerStatus.setSelection(paymentPositionID);
+        }
+        if(paymentShortArray.size()==0){
+            paymentShortArray = new ArrayList<>();
+            paymentDataArray = new ArrayList<>();
+
+            paymentDataArray.clear();
+            paymentShortArray.clear();
+
+            paymentShortArray.add("Please Select Tender");
+            TenderModel datarow = new TenderModel();
+            datarow.setTenderID(0);
+            datarow.setTenderName("Please Select Tender");
+            paymentDataArray.add(datarow);
+            new getTenderData().execute();
+
+        }
+        spinnerStatus.setItemsArray(paymentShortArray);
+        spinnerStatus.setOnItemChosenListener(this);
+        final EditText txt_netPayable_name = (EditText) dialogView.findViewById(R.id.txt_netPayable_name);
+        final EditText txt_Amount_paid = (EditText) dialogView.findViewById(R.id.txt_Amount_paid);
+        final EditText txt_due_amount = (EditText) dialogView.findViewById(R.id.txt_due_amount);
+        final EditText txt_change_return_amount = (EditText) dialogView.findViewById(R.id.txt_change_return_amount);
+        final EditText txt_invoice_id = (EditText) dialogView.findViewById(R.id.txt_invoice_id);
+        final Button btn_save_invoice = (Button) dialogView.findViewById(R.id.btn_save_invoice);
+        txt_invoice_id.setText(invoiceID.toString());
+        txt_invoice_id.setEnabled(false);
+        String posNetAble=posSubtotal.getText().toString();
+        String netPayable = posNetAble.replace("$","");
+        txt_netPayable_name.setText(netPayable);
+        txt_netPayable_name.setEnabled(false);
+        txt_due_amount.setEnabled(false);
+        txt_change_return_amount.setEnabled(false);
+        final ImageView tender_close = (ImageView) dialogView.findViewById(R.id.tender_close);
+        tender_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        txt_Amount_paid.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                System.out.println("query text: " + charSequence);
+                Double totalDue=0.00;
+                Double returnAmount=0.00;
+                Double netPayable=Double.parseDouble(txt_netPayable_name.getText().toString());
+                if(charSequence.length()==0){
+                    totalDue=0.00;
+                    returnAmount=0.00;
+                }
+                else{
+                    Double paidAmount=Double.parseDouble(charSequence.toString());
+                    totalDue=netPayable-paidAmount;
+                    if(totalDue<0){
+                        returnAmount=totalDue;
+                        totalDue=0.00;
+
+                    }
+
+
+                }
+
+
+                txt_due_amount.setText(totalDue.toString());
+                txt_change_return_amount.setText(returnAmount.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        btn_save_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Double invoiceTotal = Double.parseDouble(txt_netPayable_name.getText().toString());
+                Double AmountPaid = 0.00;
+                try {
+                    AmountPaid = Double.parseDouble(txt_Amount_paid.getText().toString());
+                }catch (Exception e){
+                    AmountPaid = 0.00;
+                }
+
+
+                System.out.println("Customer Save ID = "+customerID);
+                System.out.println("Payment Method Save ID = "+paymentID);
+                System.out.println("Amount Paid = "+AmountPaid);
+
+                System.out.println("Discount = "+discuntRate);
+                System.out.println("Discount Type = "+discountType);
+
+                Gson gson = new Gson();
+                String posItemArrayJson = gson.toJson(posItemsData);
+
+                System.out.println("Pos Item Json = "+posItemArrayJson .toString());
+                if(customerID==0){
+                    spre.SetToast(actContext,"Please select a customer.!!!");
+                    return;
+                }
+
+                if(paymentID==0){
+                    spre.SetToast(actContext,"Please your payment method.!!!");
+                    return;
+                }
+
+                if(AmountPaid.isNaN())
+                {
+                    spre.SetToast(actContext,"Please input paid amount.!!!");
+                    return;
+                }
+
+                if(AmountPaid.toString().equals("0.0"))
+                {
+                    spre.SetToast(actContext,"Please input paid amount.!!!");
+                    return;
+                }
+
+
+                new CompleteSalesSave().execute(customerID.toString(),paymentID.toString(),discuntRate.toString(),discountType.toString(),posItemArrayJson,invoiceID,AmountPaid.toString());
+
+            }
+        });
+
+        builder.setCancelable(false);
+        alertDialog = builder.create();
+        alertDialog.show();
+
+
+    }
+    public class getTenderData extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String getLoggedToken=spre.getStr(spre.loggedAPIToken);
+                TokenUtils spre = new TokenUtils(actContext);
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .addHeader("Authorization", "Bearer "+getLoggedToken)
+                        .url(spre.Api_pos_tender)
+                        .build();
+
+                String result=null;
+                try {
+                    Response response = client.newCall(request).execute();
+                    result = response.body().string();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            System.out.println("Get Tender = "+s);
+            spre.checkUnauthenticated(s);
+            System.out.println("Get Tender = "+s);
+            try {
+                spre.SetToast(actContext,"Please wait, Loading...");
+                JSONObject jsonObject=spre.perseJSONArray(s);
+                String data =null;
+                data=jsonObject.getString("data");
+                System.out.println("Parse Successful = "+data);
+                JSONArray dataObject=new JSONArray(data);
+                System.out.println("Array Length = "+dataObject.length());
+                JSONObject row = null;
 
 
 
+                for(int i=0; i<=dataObject.length(); i++){
+                    //System.out.println("JSON Sinle Array = "+dataObject.getJSONObject(i));
+                    try {
+
+                        row=dataObject.getJSONObject(i);
+
+                        TenderModel dataRow = new TenderModel();
+                        dataRow.setTenderID(row.getInt("id"));
+                        dataRow.setTenderName(row.getString("name"));
+
+                        paymentDataArray.add(dataRow);
+                        paymentShortArray.add(row.getString("name"));
+
+                    }catch (Exception e){
+                        System.out.println("Failed to prase jsonARRAY"+dataObject.length());
+                    }
+                }
+            }catch (Exception e){
+                System.out.println("Json SPLITER Failed"+s);
+            }
+        }
+    }
+    public class CompleteSalesSave extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                //Toast.makeText(MainActivity.this,params.toString(),Toast.LENGTH_SHORT).show();
+                String customer_id=params[0];
+                String payment_id=params[1];
+                String discount_rate=params[2];
+                String discount_type=params[3];
+                String posItemData=params[4];
+                String invoiceID=params[5];
+                String AmountPaid=params[6];
+
+                System.out.println("Amount Paid send = "+AmountPaid);
+
+                //setDefaults(LoggedName,Email,MainActivity.this);
+                //Utils.savSharedPreferences(MainActivity.this,new Login(Email, Password,null));
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("customer_id",customer_id)
+                        .add("payment_id",payment_id)
+                        .add("discount_rate",discount_rate)
+                        .add("discount_type",discount_type)
+                        .add("posItemData",posItemData)
+                        .add("invoiceID",invoiceID)
+                        .add("AmountPaid",AmountPaid)
+                        .add("store_id",spre.loggedStoreIDKey)
+                        .add("created_by",spre.loggedStoreIDKey)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .addHeader("Authorization", "Bearer "+spre.getStr(spre.loggedAPIToken))
+                        .url(spre.Api_pos_completeSales)
+                        .post(postData)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                String result = response.body().string();
+
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+
+        }
+
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+            Toast.makeText(actContext,"Processing please wait...",Toast.LENGTH_SHORT).show();
+
+        }
+
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            System.out.println(s);
+            spre.checkUnauthenticated(s);
+            //System.out.println(s);
+            //Toast.makeText(CustomerAddActivity.this,"Response : "+s,Toast.LENGTH_SHORT).show();
+            JSONObject jsonObject = spre.perseJSONArray(s);
+            String status = null;
+            String msg = null;
+            try {
+                status = jsonObject.getString("status");
+                msg = jsonObject.getString("msg");
+                Toast.makeText(actContext,msg,Toast.LENGTH_SHORT).show();
+
+                posItemsData.clear();
+                customerID=0;
+                customerPositionID=0;
+                discountType=0;
+                discuntRate=0.00;
+                paymentID=0;
+
+                notifycartAdapter();
+                alertDialog.dismiss();
+
+            } catch (JSONException e) {
+                Toast.makeText(actContext,"Failed, Please try again.",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void notifycartAdapter() {
+        posItemsData.clear();
+        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData);
+
+        posCartDesignRecView.setLayoutManager(new LinearLayoutManager(this));
+        posCartDesignRecView.setAdapter(cartAdapter);
+        cartAdapter.notifyDataSetChanged();
+        posSubtotal.setText("$0.00");
+        posTax.setText("$0.00");
+        posDiscount.setText("$0.00");
+        posNetPayable.setText("$0.00");
+        checkNSum();
+    }
+    private void clearShoppingCart() {
+        posItemsData.clear();
+        customerID=0;
+        customerPositionID=0;
+        discountType=0;
+        discuntRate=0.00;
+        paymentID=0;
+        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData);
+        posCartDesignRecView.setLayoutManager(new LinearLayoutManager(this));
+        posCartDesignRecView.setAdapter(cartAdapter);
+        cartAdapter.notifyDataSetChanged();
+        posSubtotal.setText("$0.00");
+        posTax.setText("$0.00");
+        posDiscount.setText("$0.00");
+        posNetPayable.setText("$0.00");
+        checkNSum();
+    }
+    /* Payment method End */
 
 }

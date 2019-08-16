@@ -13,7 +13,7 @@
         app:labelVisibilityMode="labeled"
         android:background="@color/SimpleretailPOSThemeColor"
         design:itemIconTint="@android:color/white"
-        android:id="@+id/NavBot"
+        android:id="@+id/NavBotPosBottom"
         design:itemTextColor="@android:color/white"
         android:layout_gravity="bottom"
         design:menu="@menu/pos_menu" />
