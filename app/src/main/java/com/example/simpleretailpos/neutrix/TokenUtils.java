@@ -44,7 +44,7 @@ public class TokenUtils {
         this.context = context;
     }
 
-    public final static String Api_baseUrl="http://172.20.10.2:8000";
+    public final static String Api_baseUrl="http://192.168.0.5:8000";
     public final static String Api_baseUrl_login=Api_baseUrl+"/api/login";
     public final static String Api_baseUrl_logout=Api_baseUrl+"/api/logout";
     public final static String Api_baseUrl_change_password=Api_baseUrl+"/api/change/password";
@@ -70,6 +70,10 @@ public class TokenUtils {
     public final static String Api_pos_payout=Api_baseUrl+"/api/pos/payout";
     public final static String Api_pos_tender=Api_baseUrl+"/api/pos/tender";
     public final static String Api_pos_completeSales=Api_baseUrl+"/api/pos/completesales";
+    public final static String Api_pos_drawer=Api_baseUrl+"/api/pos/drawer";
+    public final static String Api_pos_opendrawer=Api_baseUrl+"/api/pos/open/drawer";
+    public final static String Api_pos_drawerSummary=Api_baseUrl+"/api/pos/summary/drawer";
+    public final static String Api_pos_drawerClose=Api_baseUrl+"/api/pos/close/drawer";
 
     public final static String loggedAPIToken = "access_token";
     public final static String loggedAPIRefreshToken = "refresh_token";

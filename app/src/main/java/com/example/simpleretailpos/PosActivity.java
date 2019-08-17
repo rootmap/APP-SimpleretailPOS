@@ -21,9 +21,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -191,7 +193,8 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 {
                     case R.id.btn_pos_drawer:
                         //toggleCategoryView();
-
+                        spre.SetToast(actContext,"Drawer is summary loading, Please wait...");
+                        new getDrawerSummary().execute();
                         return true;
                     case R.id.btn_pos_makepayment:
                         showTender();
@@ -226,7 +229,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_customer_list)
+                        .url(spre.Api_pos_drawer)
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -239,58 +242,325 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
         protected void onPostExecute(String s){
             super.onPostExecute(s);
+            System.out.println("Get drawer = "+s);
             spre.checkUnauthenticated(s);
-            System.out.println("Get customer = "+s);
+            System.out.println("Get Afteer Authenticate drawer = "+s);
+            String data =null;
             try {
-                spre.SetToast(actContext,"Please wait, Loading...");
+                //spre.SetToast(actContext,"Please wait, Loading...");
                 JSONObject jsonObject=spre.perseJSONArray(s);
-                String data =null;
-                data=jsonObject.getString("data");
-                System.out.println("Parse Successful = "+data);
-                JSONArray dataObject=new JSONArray(data);
-                System.out.println("Array Length = "+dataObject.length());
-                JSONObject row = null;
-                custData.clear();
-                CustomerData dataRows = new CustomerData();
-                dataRows.setId(900000000);
-                dataRows.setName("Select Customer");
-                custData.add(dataRows);
+                data=jsonObject.getString("status");
 
-                dataRows.setId(900000001);
-                dataRows.setName("Add New Customer");
-                custData.add(dataRows);
-
-                dataRows.setId(900000002);
-                dataRows.setName("No Customer");
-                custData.add(dataRows);
-
-                for(int i=0; i<=dataObject.length(); i++){
-                    //System.out.println("JSON Sinle Array = "+dataObject.getJSONObject(i));
-                    try {
-
-                        row=dataObject.getJSONObject(i);
+            }catch (Exception e){
+                System.out.println("Json SPLITER Failed"+s);
+            }
 
 
-                        String nnm=row.getString("name").toString();
-                        if(nnm.equals("No Customer")) {
+            showHideDrawer(data.toString());
+        }
+    }
+    private void showHideDrawer(String data) {
+        FrameLayout posBottomMenulrt = (FrameLayout) findViewById(R.id.posBottomMenulrt);
+        RelativeLayout posInnerFrame = (RelativeLayout) findViewById(R.id.posInnerFrame);
+        if(data.equals("1")){
+            //alertDialog.dismiss();
+            //spre.SetToast(actContext,"Drawer is open successfully");
+            posBottomMenulrt.setVisibility(View.VISIBLE);
+            posInnerFrame.setVisibility(View.VISIBLE);
 
-                        }
-                        else
-                        {
-                            CustomerData dataRow = new CustomerData();
-                            dataRow.setId(row.getInt("id"));
-                            dataRow.setName(row.getString("name"));
+        }
+        else if(data.equals("2")) {
+            posBottomMenulrt.setVisibility(View.VISIBLE);
+            posInnerFrame.setVisibility(View.VISIBLE);
+            //spre.SetToast(actContext, "Drawer is already open");
 
-                            custData.add(dataRow);
-                            customerArray.add(row.getString("name"));
-                        }
-                    }catch (Exception e){
-                        System.out.println("Failed to prase jsonARRAY"+dataObject.length());
-                    }
+        }else if(data.equals("0")){
+
+            posBottomMenulrt.setVisibility(View.GONE);
+            posInnerFrame.setVisibility(View.GONE);
+            spre.SetToast(actContext,"Please open your drawer");
+            showAlertforOpenDrawer();
+
+        }else{
+
+            posBottomMenulrt.setVisibility(View.GONE);
+            posInnerFrame.setVisibility(View.GONE);
+            spre.SetToast(actContext,"Please open your drawer");
+            showAlertforOpenDrawer();
+        }
+
+    }
+    public void showAlertforOpenDrawer(){
+
+        LayoutInflater layoutInflater = LayoutInflater.from(actContext);
+        View dialogView = layoutInflater.inflate(R.layout.pos_open_drawer, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
+        builder.setView(dialogView);
+
+
+        final ImageView openstorebutton_close = (ImageView) dialogView.findViewById(R.id.openstorebutton_close);
+        final EditText openStoreBalance = (EditText) dialogView.findViewById(R.id.openStoreBalance);
+        final Button btn_save_openstore = (Button) dialogView.findViewById(R.id.btn_save_openstore);
+        openstorebutton_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        btn_save_openstore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String openStoreBalanceAmount =openStoreBalance.getText().toString();
+                if(openStoreBalanceAmount.length()==0){
+                    spre.SetToast(actContext,"Please enter a opening amount.");
+                    return;
+                }
+                Double openStoreBalanceAmountDouble=Double.parseDouble(openStoreBalanceAmount);
+                if(openStoreBalanceAmountDouble.isNaN())
+                {
+                    spre.SetToast(actContext,"Please enter a opening amount.");
+                    return;
+                }
+
+                new saveOpenDrawer().execute(openStoreBalanceAmountDouble.toString());
+            }
+        });
+
+        final Button btn_save_discount = (Button) dialogView.findViewById(R.id.btn_save_discount);
+        final EditText txt_discount_amount = (EditText) dialogView.findViewById(R.id.txt_discount_amount);
+        builder.setCancelable(false);
+
+        alertDialog = builder.create();
+        alertDialog.show();
+
+    }
+    public class saveOpenDrawer extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String openStoreBalance=params[0];
+                OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("openStoreBalance",openStoreBalance)
+                        .add("store_id",spre.loggedStoreIDKey)
+                        .add("created_by",spre.loggedStoreIDKey)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .addHeader("Authorization", "Bearer "+spre.getStr(spre.loggedAPIToken))
+                        .url(spre.Api_pos_opendrawer)
+                        .post(postData)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                String result = response.body().string();
+
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+
+        }
+
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+            Toast.makeText(actContext,"Processing please wait...",Toast.LENGTH_SHORT).show();
+
+        }
+
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            System.out.println("Save open drawer response ="+s);
+            spre.checkUnauthenticated(s);
+
+            String data =null;
+            try {
+                spre.SetToast(actContext,"Please wait, Processing...");
+                JSONObject jsonObject=spre.perseJSONArray(s);
+                data=jsonObject.getString("status");
+                if (data.equals("1")){
+                    alertDialog.dismiss();
+                    spre.SetToast(actContext,"Drawer is open successfully");
+                }
+                else if (data.equals("2")){
+                    spre.SetToast(actContext,"Drawer is already open");
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                System.out.println("Json SPLITER Failed"+s);
+            }
+
+            showHideDrawer(data);
+
+        }
+    }
+    public class getDrawerSummary extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String getLoggedToken=spre.getStr(spre.loggedAPIToken);
+                TokenUtils spre = new TokenUtils(actContext);
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .addHeader("Authorization", "Bearer "+getLoggedToken)
+                        .url(spre.Api_pos_drawerSummary)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                String result = response.body().string();
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            System.out.println("Get drawer Summary= "+s);
+            spre.checkUnauthenticated(s);
+            System.out.println("Get Afteer Authenticate drawer Summary = "+s);
+            String data =null;
+            try {
+                //spre.SetToast(actContext,"Please wait, Loading...");
+                JSONObject jsonObject=spre.perseJSONArray(s);
+                data=jsonObject.getString("status");
+                System.out.println(data);
+                if(data.equals("1")){
+                    showSummary(s);
+                }else{
+                    spre.SetToast(actContext,"Failed to load, Please logout and login again.");
                 }
             }catch (Exception e){
                 System.out.println("Json SPLITER Failed"+s);
             }
+
+        }
+    }
+    public void showSummary(String s){
+
+        System.out.println("Summary initiated = "+customerID);
+
+        LayoutInflater layoutInflater = LayoutInflater.from(actContext);
+        View dialogView = layoutInflater.inflate(R.layout.pos_drawer_summary, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
+        builder.setView(dialogView);
+
+        final TextView closingDateTime = (TextView) dialogView.findViewById(R.id.closingDateTime);
+        final TextView txt_totalcollection_amount = (TextView) dialogView.findViewById(R.id.txt_totalcollection_amount);
+        final TextView txt_opening_amount = (TextView) dialogView.findViewById(R.id.txt_opening_amount);
+        final TextView txt_payout_amount = (TextView) dialogView.findViewById(R.id.txt_payout_amount);
+        final TextView txt_tax_amount = (TextView) dialogView.findViewById(R.id.txt_tax_amount);
+        final TextView txt_nettotal_amount = (TextView) dialogView.findViewById(R.id.txt_nettotal_amount);
+        final Button btn_save_closeDrawer = (Button) dialogView.findViewById(R.id.btn_save_closeDrawer);
+
+
+        //showing all available data
+        try {
+            String opening_time=null;
+            Double salesTotal=0.00;
+            Double opening_amount=null;
+            Double totalPayout=null;
+            Double totalTax=null;
+            JSONObject jsonObject=spre.perseJSONArray(s);
+            opening_time=jsonObject.getString("opening_time");
+            salesTotal=Double.parseDouble(jsonObject.getString("salesTotal"));
+            opening_amount=Double.parseDouble(jsonObject.getString("opening_amount"));
+            totalPayout=Double.parseDouble(jsonObject.getString("totalPayout"));
+            totalTax=Double.parseDouble(jsonObject.getString("totalTax"));
+            System.out.println(opening_time);
+            closingDateTime.setText("Drawer Closing Detail | ("+opening_time+")");
+            txt_totalcollection_amount.setText(salesTotal.toString());
+            txt_opening_amount.setText(opening_amount.toString());
+            txt_payout_amount.setText(totalPayout.toString());
+            txt_tax_amount.setText(totalTax.toString());
+            Double currectStoreTotal=salesTotal+opening_amount+totalPayout;
+            txt_nettotal_amount.setText(currectStoreTotal.toString());
+
+        }catch (Exception e){
+            System.out.println("Summary Json Failed To Parse = "+s);
+        }
+
+
+       // LabelledSpinner spinnerStatus = dialogView.findViewById(R.id.txt_customer_id);
+
+
+
+        final ImageView summarystorebutton_close = (ImageView) dialogView.findViewById(R.id.summarystorebutton_close);
+        summarystorebutton_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        btn_save_closeDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spre.SetToast(actContext,"Processing, Please wait...");
+                alertDialog.dismiss();
+                new getSaveCloseStore().execute();
+            }
+        });
+
+        builder.setCancelable(false);
+
+        alertDialog = builder.create();
+        alertDialog.show();
+
+
+    }
+    public class getSaveCloseStore extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String getLoggedToken=spre.getStr(spre.loggedAPIToken);
+                TokenUtils spre = new TokenUtils(actContext);
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .addHeader("Authorization", "Bearer "+getLoggedToken)
+                        .url(spre.Api_pos_drawerClose)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                String result = response.body().string();
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            System.out.println("Get Close drawer = "+s);
+            spre.checkUnauthenticated(s);
+            System.out.println("Get Afteer Authenticate Close drawer = "+s);
+            String data =null;
+            try {
+                //spre.SetToast(actContext,"Please wait, Loading...");
+                JSONObject jsonObject=spre.perseJSONArray(s);
+                data=jsonObject.getString("status");
+                if(data.equals("1")){
+                    showHideDrawer("0");
+                }
+                else{
+                    spre.SetToast(actContext,"Failed, Please try again.");
+                }
+            }catch (Exception e){
+                System.out.println("Json SPLITER Failed"+s);
+            }
+
         }
     }
     /*Drawer Status Start*/
@@ -709,10 +979,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
             return false;
         }
 
-        if(txt_reason.length()==0){
-            spre.SetToast(actContext,"Sold price required. !!!");
-            return false;
-        }
+
 
         return true;
     }
