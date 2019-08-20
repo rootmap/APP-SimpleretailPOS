@@ -29,14 +29,10 @@ import okhttp3.Response;
 public class CustomerLeadListActivity extends AppCompatActivity {
     private ListView listView;
     private Button setting;
-
     private static final String TAG = "CustomerLeadListActivity";
-
     //vars
-
     private List<CustomerLeadData> lstAnime;
     private RecyclerView recyclerView;
-
     TokenUtils tokenUtils;
     TokenUtils spre = new TokenUtils(this);
     @Override
@@ -112,7 +108,7 @@ public class CustomerLeadListActivity extends AppCompatActivity {
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_customer_lead_list)
+                        .url(spre.Api_customer_lead_list+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();

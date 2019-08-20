@@ -65,6 +65,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         holder.coustomar_name_ID.setText(mData.get(position).getName());
         holder.phone_number_ID.setText(mData.get(position).getPhone());
         holder.dateID.setText(mData.get(position).getCreated_at());
+        holder.email_ID.setText(mData.get(position).getEmail());
 
         /*holder.coustomar_name_ID.setText(name.get(position));
         holder.phone_number_ID.setText(phone.get(position));
@@ -77,10 +78,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     }
 
     public class CustomerViewHolder extends RecyclerView.ViewHolder{
-        TextView coustomar_name_ID,phone_number_ID,dateID;
+        TextView coustomar_name_ID,phone_number_ID,dateID,email_ID;
         RelativeLayout parentLayout;
         LinearLayout lin1,lin2;
-        Button iconID;
+
         public CustomerViewHolder(@NonNull View itemView) {
             super(itemView);
             coustomar_name_ID = itemView.findViewById(R.id.coustomar_name_ID);
@@ -89,7 +90,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
             parentLayout = itemView.findViewById(R.id.parent_layout);
             lin1 = itemView.findViewById(R.id.lin1);
             lin2 = itemView.findViewById(R.id.lin2);
-            iconID = itemView.findViewById(R.id.iconID);
+            email_ID = itemView.findViewById(R.id.email_ID);
         }
     }
 

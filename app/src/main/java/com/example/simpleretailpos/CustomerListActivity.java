@@ -26,22 +26,15 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 public class CustomerListActivity extends AppCompatActivity {
-
     private ListView listView;
     private Button setting;
-
     private static final String TAG = "CustomerListActivity";
-
     //vars
-
     private List<CustomerData> lstAnime;
     private RecyclerView recyclerView;
-
     TokenUtils tokenUtils;
     TokenUtils spre = new TokenUtils(this);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +73,6 @@ public class CustomerListActivity extends AppCompatActivity {
 
 
     }
-
     private void initCustomerData(){
         /*Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
 
@@ -96,7 +88,6 @@ public class CustomerListActivity extends AppCompatActivity {
 
         //initRecyclerView();
     }
-
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview.");
        /* RecyclerView recyclerView = findViewById(R.id.recyclerv_view);
@@ -104,9 +95,7 @@ public class CustomerListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));*/
     }
-
     public class getCustomerData extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
 
@@ -121,38 +110,28 @@ public class CustomerListActivity extends AppCompatActivity {
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_customer_list)
+                        .url(spre.Api_customer_list+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
                 String result = response.body().string();
-
-
-                //responseTextFromAPI.setText(result);
-
                 return result;
             }catch (Exception ex){
                 return null;
             }
 
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-
-
-
             try {
                 JSONObject jsonObject=spre.perseJSONArray(s);
                 String data =null;
                 data=jsonObject.getString("data");
                 System.out.println("Parse Successful = "+data);
-
                 JSONArray dataObject=new JSONArray(data);
                 System.out.println("Array Length = "+dataObject.length());
                 JSONObject row = null;
                 for(int i=0; i<=dataObject.length(); i++){
-
                     try {
                         row=dataObject.getJSONObject(i);
                         CustomerData dataRow = new CustomerData();
@@ -168,19 +147,13 @@ public class CustomerListActivity extends AppCompatActivity {
                     }catch (Exception e){
                         System.out.println("Failed to prase jsonARRAY"+dataObject.length());
                     }
-
                 }
-
                 setUpRecyleView(lstAnime);
-
             }catch (Exception e){
                 System.out.println("Json SPLITER Failed"+s);
             }
-
-            //System.out.println("Customer list Response"+s);
         }
     }
-
     private void setUpRecyleView(List<CustomerData> lstAnime) {
         CustomerAdapter customerAdapter = new CustomerAdapter(this,lstAnime);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

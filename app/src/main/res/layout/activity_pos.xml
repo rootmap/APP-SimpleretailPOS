@@ -30,6 +30,19 @@
             design:titleTextColor="@color/white"
             android:background="@color/SimpleretailPOSThemeColor" />
 
+        <ImageView
+            android:id="@+id/imgBacktoHome"
+            android:layout_width="35dp"
+            android:layout_height="34dp"
+            android:layout_alignEnd="@+id/topMenu"
+            android:layout_alignRight="@+id/topMenu"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="11dp"
+
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/ic_home_white" />
+
         <RelativeLayout
             android:layout_margin="5dp"
             android:gravity="top"

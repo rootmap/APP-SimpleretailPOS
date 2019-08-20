@@ -53,6 +53,14 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Please wait, Customer data is loading..."
+            android:textSize="16sp"
+            android:gravity="center"
+            android:id="@+id/loadingTxtCustomerData"
+            android:layout_marginTop="30dp"
+            android:layout_height="match_parent" />
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

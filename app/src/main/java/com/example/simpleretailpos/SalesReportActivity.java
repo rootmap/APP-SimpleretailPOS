@@ -53,19 +53,8 @@ public class SalesReportActivity extends AppCompatActivity {
     }
 
     private void initCustomerData(){
-        /*Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
-
-        name.add("Fahad Bhuyian");
-        phone.add("01860748020");
-        created_at.add("01860748020");
-
-        name.add("Shakil Khan");
-        phone.add("01860748020");
-        created_at.add("01860748020");*/
 
         new getInventoryData().execute();
-
-        //initRecyclerView();
     }
 
     private void initRecyclerView(){
@@ -90,7 +79,7 @@ public class SalesReportActivity extends AppCompatActivity {
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_sales_report)
+                        .url(spre.Api_sales_report+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -108,7 +97,7 @@ public class SalesReportActivity extends AppCompatActivity {
 
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-
+            spre.checkUnauthenticated(s);
 
 
             try {

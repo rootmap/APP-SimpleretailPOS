@@ -249,7 +249,7 @@ public class InventoryCreateActivity extends AppCompatActivity  implements Label
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer " + getLoggedToken)
-                        .url(spre.Api_category)
+                        .url(spre.Api_category+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -357,6 +357,7 @@ public class InventoryCreateActivity extends AppCompatActivity  implements Label
                         .add("cost",txt_cost)
                         .add("store_id",spre.loggedStoreIDKey)
                         .add("created_by",spre.loggedStoreIDKey)
+                        .add("token",spre.setRawToken())
                         .build();
 
                 Request request = new Request.Builder()

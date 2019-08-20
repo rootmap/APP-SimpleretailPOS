@@ -269,7 +269,7 @@ public class ExpenseCreateActivity extends AppCompatActivity implements Labelled
 
                 // String paramSearch = params[0];
                 String getLoggedToken = spre.getStr(spre.loggedAPIToken);
-                Log.d(TAG, "API TOKEN for Customer List =" + getLoggedToken);
+                Log.d(TAG, "API TOKEN for product List =" + getLoggedToken);
                 TokenUtils spre = new TokenUtils(actContext);
 
                 OkHttpClient client = new OkHttpClient();
@@ -277,7 +277,7 @@ public class ExpenseCreateActivity extends AppCompatActivity implements Labelled
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer " + getLoggedToken)
-                        .url(spre.Api_expense_head)
+                        .url(spre.Api_expense_head+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -295,7 +295,7 @@ public class ExpenseCreateActivity extends AppCompatActivity implements Labelled
 
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            spre.checkUnauthenticated(s);
 
 
             try {
@@ -382,6 +382,7 @@ public class ExpenseCreateActivity extends AppCompatActivity implements Labelled
                         .add("expense_amount",txt_stock_qty)
                         .add("store_id",spre.loggedStoreIDKey)
                         .add("created_by",spre.loggedStoreIDKey)
+                        .add("token",spre.setRawToken())
                         .build();
 
                 Request request = new Request.Builder()

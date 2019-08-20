@@ -144,6 +144,7 @@ public class CustomerAddActivity extends AppCompatActivity {
                         .add("email",customer_email)
                         .add("store_id",spre.loggedStoreIDKey)
                         .add("created_by",spre.loggedStoreIDKey)
+                        .add("token",spre.setRawToken())
                         .build();
 
                 Request request = new Request.Builder()
@@ -166,9 +167,7 @@ public class CustomerAddActivity extends AppCompatActivity {
 
         protected void onPreExecute(){
             super.onPreExecute();
-
-            Toast.makeText(CustomerAddActivity.this,"Processing please wait...",Toast.LENGTH_SHORT).show();
-
+            spre.SetToast(CustomerAddActivity.this,"Processing please wait...");
         }
 
         protected void onPostExecute(String s){

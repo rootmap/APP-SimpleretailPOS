@@ -42,74 +42,48 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CustomerLeadActivity extends AppCompatActivity {
-
-
     @BindView(R.id.frameSuggestion)
     LinearLayout frameSuggestion;
-
     @BindView(R.id.recyclerViewMedicineSuggestion)
     RecyclerView recyclerViewMedicineSuggestion;
-
-
     @BindView(R.id.autoCompleteShop)
     EditText autoCompleteShop;
-
     @BindView(R.id.txt_customer_address)
     EditText txt_customer_address;
-
     @BindView(R.id.txt_customer_phone)
     EditText txt_customer_phone;
-
     @BindView(R.id.txt_customer_email)
     EditText txt_customer_email;
-
     @BindView(R.id.txt_customer_id)
     EditText txt_customer_id;
-
-
     @BindView(R.id.txt_customer_lead)
     EditText txt_customer_lead;
-
     @BindView(R.id.btn_save_customer)
     Button btn_save_customer;
-
     @BindView(R.id.btn_reset_general_sales)
     Button btn_reset_customer;
-
     @BindView(R.id.frmCustomerList)
     FrameLayout frmCustomerList;
-
     @BindView(R.id.NavBot)
     BottomNavigationView bottomNavigationView;
-
-
     @BindView(R.id.layoutMedicineSearch)
     LinearLayout layoutMedicineSearch;
     private Integer CustomerID=0;
-
     private static final String TAG = "CustomerLeadActivity";
-
     TokenUtils tokenUtils;
     TokenUtils spre = new TokenUtils(this);
     private List<CustomerSpinnerModel> lstAnime;
     private ArrayList<CustomerSpinnerModel> products = new ArrayList<>();
     ArrayList<CustomerSpinnerModel> newProducts = new ArrayList<>();
-    //    private ArrayList<Category> categories = new ArrayList<>();
     private NonOtcMedicineSuggestionAdapter medicineSuggestionAdapter;
-    //    CategoryAdapter categoryAdapter;
     private LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_lead);
-
         ButterKnife.bind(this);
         setUpAutoComplete();
         setUpSuggestion();
-
-        //setupSpinners();
-
         autoCompleteShop.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -130,14 +104,6 @@ public class CustomerLeadActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        /*autoCompleteShop.setText(products.get(position).getName());
-        CustomerID=products.get(position).getId();
-        //txt_customer_id.setText(products.get(position).getId());
-        txt_customer_address.setText(products.get(position).getAddress());
-        txt_customer_phone.setText(products.get(position).getPhone());
-        txt_customer_email.setText(products.get(position).getEmail());
-        //txt_customer_lead*/
         btn_reset_customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,58 +155,7 @@ public class CustomerLeadActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-        //
     }
-
-    /*private void setupSpinners() {
-
-        LabelledSpinner spinnerStatus = findViewById(R.id.spinnerStatus);
-
-
-        List<String> statusList = new ArrayList<>();
-        statusList.add("Dengue Status");
-        statusList.add("Safe zone");
-        statusList.add("Dengue affected zone");
-
-
-        spinnerStatus.setItemsArray(statusList);
-
-
-        //spinnerRegion.setSelection(0);
-
-        spinnerStatus.setOnItemChosenListener(this);
-
-    }*/
-
-    /*@Override
-    public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
-
-        switch (labelledSpinner.getId()) {
-
-
-            case R.id.spinnerStatus:
-
-//                if (position == 1) {
-//                    status = 0;
-//                } else if (position == 2) {
-//                    status = 1;
-//                } else {
-//                    status = null;
-//                }
-
-
-                break;
-            // If you have multiple LabelledSpinners, you can add more cases here
-        }
-    }*/
-
-    /*@Override
-    public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {
-
-    }*/
-
 
     private void setUpAutoComplete() {
 
@@ -248,7 +163,6 @@ public class CustomerLeadActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int
                     count, int after) {
-
             }
 
             @Override
@@ -289,21 +203,13 @@ public class CustomerLeadActivity extends AppCompatActivity {
 
     private void filter(String searchStr) {
         //new array list that will hold the filtered data
-
         newProducts.clear();
         ArrayList<CustomerSpinnerModel> newProducts = new ArrayList<>();
-        //looping through existing elements
         for (CustomerSpinnerModel s : products) {
-            //if the existing elements contains the search input
             if (s.getName().toLowerCase().contains(searchStr.toLowerCase())) {
-                //adding the element to filtered list
                 newProducts.add(s);
             }
         }
-
-        //calling a method of the adapter class and passing the filtered list
-        System.out.println("Default Result = "+newProducts.size());
-
         recyclerViewMedicineSuggestion.setLayoutManager(mLayoutManager);
         medicineSuggestionAdapter = new NonOtcMedicineSuggestionAdapter(this, newProducts);
         recyclerViewMedicineSuggestion.setAdapter(medicineSuggestionAdapter);
@@ -312,37 +218,27 @@ public class CustomerLeadActivity extends AppCompatActivity {
                 , DividerItemDecoration.VERTICAL));
 
         medicineSuggestionAdapter.notifyDataSetChanged();
-
         recyclerViewMedicineSuggestion.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerViewMedicineSuggestion, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 autoCompleteShop.setText(products.get(position).getName());
-                //hidden_customer_id.setText(products.get(position).getEmail());
                 frameSuggestion.setVisibility(View.GONE);
             }
-
-
             @Override
             public void onLongClick(View view, int position) {
-
             }
         }));
     }
 
     private void setDefaultSearch() {
-
-
             System.out.println("Default Result = "+products.size());
-
             recyclerViewMedicineSuggestion.setLayoutManager(mLayoutManager);
             medicineSuggestionAdapter = new NonOtcMedicineSuggestionAdapter(this, products);
             recyclerViewMedicineSuggestion.setAdapter(medicineSuggestionAdapter);
             recyclerViewMedicineSuggestion.addItemDecoration(new DividerItemDecoration(Objects
                     .requireNonNull(this)
                     , DividerItemDecoration.VERTICAL));
-
             medicineSuggestionAdapter.notifyDataSetChanged();
-
     }
 
     private void searchOnCustomerList(String searchStr) {
@@ -355,19 +251,10 @@ public class CustomerLeadActivity extends AppCompatActivity {
             medicineSuggestionAdapter = new NonOtcMedicineSuggestionAdapter(this, newFilterProducts);
             medicineSuggestionAdapter.notifyDataSetChanged();
             recyclerViewMedicineSuggestion.setAdapter(medicineSuggestionAdapter);
-
             System.out.println("After clear getting = "+newFilterProducts.size());
-            //medicineSuggestionAdapter.notifyDataSetChanged();
-            //medicineSuggestionAdapter = new NonOtcMedicineSuggestionAdapter(this, newProducts);
-            //medicineSuggestionAdapter.notifyDataSetChanged();
-            //recyclerViewMedicineSuggestion.setAdapter(medicineSuggestionAdapter);
-
-            //ArrayList<CustomerSpinnerModel> newProducts = new ArrayList<>();
             for (int i=0; i<products.size(); i++) {
-
                 if (products.get(i).getName().toLowerCase().contains(searchStr.toLowerCase()) || products.get(i).getPhone().contains(searchStr)) {
                     newProducts.add(products.get(i));
-
                     CustomerSpinnerModel dataRow = new CustomerSpinnerModel();
                     dataRow.setId(products.get(i).getId());
                     dataRow.setName(products.get(i).getName());
@@ -379,28 +266,16 @@ public class CustomerLeadActivity extends AppCompatActivity {
                     newFilterProducts.add(dataRow);
                     //products.add(dataRow);
                     //medicineSuggestionAdapter.notifyDataSetChanged();
-
                     System.out.println("Search Contain = "+products.get(i).getName()+"   Position = "+i);
                 }
 
-
-                // name match condition. this might differ depending on your requirement
-                // here we are looking for name or phone number match
-
             }
-
-
 
             System.out.println("Out Side loop newProducts = "+newProducts.size());
             System.out.println("Found in Loop Side loop newFilterProducts = "+newFilterProducts.size());
-
             newProducts=newFilterProducts;
-
             //newFilterProducts.clear();
-
             System.out.println("Out Side loop newProducts found after assign = "+newFilterProducts.size());
-
-
             recyclerViewMedicineSuggestion.setLayoutManager(mLayoutManager);
             medicineSuggestionAdapter = new NonOtcMedicineSuggestionAdapter(this, newFilterProducts);
             recyclerViewMedicineSuggestion.setAdapter(medicineSuggestionAdapter);
@@ -416,29 +291,13 @@ public class CustomerLeadActivity extends AppCompatActivity {
                     frameSuggestion.setVisibility(View.GONE);
                 }
 
-
                 @Override
                 public void onLongClick(View view, int position) {
 
                 }
             }));
 
-
             System.out.println("Search Result = "+newProducts.size());
-
-            /*recyclerViewMedicineSuggestion.setLayoutManager(mLayoutManager);
-            medicineSuggestionAdapter = new NonOtcMedicineSuggestionAdapter(this, newProducts);
-            recyclerViewMedicineSuggestion.setAdapter(medicineSuggestionAdapter);
-            recyclerViewMedicineSuggestion.addItemDecoration(new DividerItemDecoration(Objects
-                    .requireNonNull(this)
-                    , DividerItemDecoration.VERTICAL));
-
-            medicineSuggestionAdapter.notifyDataSetChanged();*/
-            /*if(newProducts.size()==0)
-            {
-                newProducts=products;
-            }*/
-
             //newProducts = filteredList;
         }
     }
@@ -539,7 +398,7 @@ public class CustomerLeadActivity extends AppCompatActivity {
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer " + getLoggedToken)
-                        .url(spre.Api_customer_list)
+                        .url(spre.Api_customer_list+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -639,6 +498,7 @@ public class CustomerLeadActivity extends AppCompatActivity {
                         .add("lead_info",customer_lead)
                         .add("store_id",spre.loggedStoreIDKey)
                         .add("created_by",spre.loggedStoreIDKey)
+                        .add("token",spre.setRawToken())
                         .build();
 
                 Request request = new Request.Builder()
@@ -675,19 +535,14 @@ public class CustomerLeadActivity extends AppCompatActivity {
             String msg = null;
             try {
                 frameSuggestion.setVisibility(View.GONE);
-
                 status = jsonObject.getString("status");
                 msg = jsonObject.getString("msg");
                 emptyLeadInput();
                 spre.SetToast(CustomerLeadActivity.this,msg);
-
             } catch (JSONException e) {
                 frameSuggestion.setVisibility(View.GONE);
                 spre.SetToast(CustomerLeadActivity.this,"Failed, Please try again.");
             }
-
-
-
         }
     }
 

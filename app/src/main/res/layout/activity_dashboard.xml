@@ -55,7 +55,8 @@
         android:text="Manage Account"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 
 
@@ -110,7 +111,7 @@
                             android:layout_width="80dp"
 
                             android:layout_height="80dp"
-                            android:src="@mipmap/ic_dashboard_pos" />
+                            design:srcCompat="@drawable/ic_shopping_cart_simpleretailtheme" />
 
                         <View
                             android:layout_width="match_parent"
@@ -126,7 +127,8 @@
                             android:text="Cash Register"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -157,7 +159,7 @@
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-                            android:src="@mipmap/ic_dashboard_customer" />
+                            design:srcCompat="@drawable/ic_person_simpleretailtheme" />
 
                         <View
                             android:layout_width="match_parent"
@@ -173,7 +175,8 @@
                             android:text="Customer"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -203,7 +206,7 @@
                             android:layout_width="80dp"
 
                             android:layout_height="80dp"
-                            android:src="@mipmap/ic_dashboard_customer_lead" />
+                            design:srcCompat="@drawable/ic_wc_simpleretailpos" />
 
                         <View
                             android:layout_width="match_parent"
@@ -219,7 +222,8 @@
                             android:text="Customer Lead"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -249,7 +253,7 @@
                             android:layout_width="80dp"
 
                             android:layout_height="80dp"
-                            android:src="@mipmap/ic_dashboard_expense" />
+                            design:srcCompat="@drawable/ic_expense_simpleretailpos" />
 
                         <View
                             android:layout_width="match_parent"
@@ -265,7 +269,8 @@
                             android:text="Expense"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -295,7 +300,7 @@
                             android:layout_width="80dp"
 
                             android:layout_height="80dp"
-                            android:src="@mipmap/ic_dashboard_inventory" />
+                            design:srcCompat="@drawable/ic_product_simepleretailpos" />
 
                         <View
                             android:layout_width="match_parent"
@@ -311,7 +316,8 @@
                             android:text="Inventory"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -340,7 +346,7 @@
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-                            android:src="@mipmap/ic_dashboard_report" />
+                            design:srcCompat="@drawable/ic_report_simpleretailpos" />
 
                         <View
                             android:layout_width="match_parent"
@@ -356,7 +362,8 @@
                             android:text="Reports"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 

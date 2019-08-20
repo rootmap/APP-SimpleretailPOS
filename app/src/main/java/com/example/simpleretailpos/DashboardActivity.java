@@ -314,6 +314,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 RequestBody postData = new FormBody.Builder()
                         .add("password",newPassword)
+                        .add("token",getLoggedToken)
                         .build();
 
                 Request request = new Request.Builder()
@@ -366,6 +367,11 @@ public class DashboardActivity extends AppCompatActivity {
             try {
 
                 OkHttpClient client = new OkHttpClient();
+                RequestBody postData = new FormBody.Builder()
+                        .add("token",spre.loggedAPIToken)
+                        .add("store_id",spre.loggedStoreIDKey)
+                        .add("created_by",spre.loggedStoreIDKey)
+                        .build();
                 Request request = new Request.Builder()
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
@@ -400,15 +406,10 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    public void ShowPreperence()
-    {
-
+    public void ShowPreperence(){
         String sai=spre.getStr(spre.loggedNameKey);
-        //String sai="Test ";
         logged_user_name = (TextView)findViewById(R.id.logged_user_name);
         logged_user_name.setText(sai);
-
-        //Toast.makeText(DashboardActivity.this,"API-TOKEN = "+sai,Toast.LENGTH_SHORT).show();
     }
 
     /*public void CustomerAddActivity()

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -105,6 +106,9 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     @BindView(R.id.posNetPayable)
     TextView posNetPayable;
 
+    @BindView(R.id.imgBacktoHome)
+    ImageView imgBacktoHome;
+
 
 
     AlertDialog alertDialog;
@@ -154,6 +158,14 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         posItemsData = new ArrayList<>();
         pos_category_recyclerv_view = findViewById(R.id.pos_category_recyclerv_view);
         pos_product_recyclerv_view = findViewById(R.id.pos_product_recyclerv_view);
+        imgBacktoHome = findViewById(R.id.imgBacktoHome);
+        imgBacktoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spre.DashboardLink(actContext);
+            }
+        });
+
         posCartDesignRecView = findViewById(R.id.posCartDesignRecView);
         posTopNavBot=findViewById(R.id.posTopNavBot);
         posTopNavBot.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -229,7 +241,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_pos_drawer)
+                        .url(spre.Api_pos_drawer+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -242,20 +254,14 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-            System.out.println("Get drawer = "+s);
             spre.checkUnauthenticated(s);
-            System.out.println("Get Afteer Authenticate drawer = "+s);
             String data =null;
             try {
-                //spre.SetToast(actContext,"Please wait, Loading...");
                 JSONObject jsonObject=spre.perseJSONArray(s);
                 data=jsonObject.getString("status");
-
             }catch (Exception e){
                 System.out.println("Json SPLITER Failed"+s);
             }
-
-
             showHideDrawer(data.toString());
         }
     }
@@ -346,6 +352,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .add("openStoreBalance",openStoreBalance)
                         .add("store_id",spre.loggedStoreIDKey)
                         .add("created_by",spre.loggedStoreIDKey)
+                        .add("token",spre.getStr(spre.loggedAPIToken))
                         .build();
 
                 Request request = new Request.Builder()
@@ -365,19 +372,13 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
             }
 
         }
-
         protected void onPreExecute(){
             super.onPreExecute();
-
-            Toast.makeText(actContext,"Processing please wait...",Toast.LENGTH_SHORT).show();
-
+            spre.SetToast(actContext,"Processing please wait...");
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-            System.out.println("Save open drawer response ="+s);
             spre.checkUnauthenticated(s);
-
             String data =null;
             try {
                 spre.SetToast(actContext,"Please wait, Processing...");
@@ -394,13 +395,11 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 e.printStackTrace();
                 System.out.println("Json SPLITER Failed"+s);
             }
-
             showHideDrawer(data);
-
         }
     }
-    public class getDrawerSummary extends AsyncTask<String, Void, String> {
 
+    public class getDrawerSummary extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             try {
@@ -411,7 +410,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_pos_drawerSummary)
+                        .url(spre.Api_pos_drawerSummary+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -421,15 +420,11 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 return null;
             }
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-            System.out.println("Get drawer Summary= "+s);
             spre.checkUnauthenticated(s);
-            System.out.println("Get Afteer Authenticate drawer Summary = "+s);
             String data =null;
             try {
-                //spre.SetToast(actContext,"Please wait, Loading...");
                 JSONObject jsonObject=spre.perseJSONArray(s);
                 data=jsonObject.getString("status");
                 System.out.println(data);
@@ -445,15 +440,12 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         }
     }
     public void showSummary(String s){
-
+        System.out.println("Drawer Summary = "+s);
         System.out.println("Summary initiated = "+customerID);
-
         LayoutInflater layoutInflater = LayoutInflater.from(actContext);
         View dialogView = layoutInflater.inflate(R.layout.pos_drawer_summary, null);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
         builder.setView(dialogView);
-
         final TextView closingDateTime = (TextView) dialogView.findViewById(R.id.closingDateTime);
         final TextView txt_totalcollection_amount = (TextView) dialogView.findViewById(R.id.txt_totalcollection_amount);
         final TextView txt_opening_amount = (TextView) dialogView.findViewById(R.id.txt_opening_amount);
@@ -461,8 +453,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         final TextView txt_tax_amount = (TextView) dialogView.findViewById(R.id.txt_tax_amount);
         final TextView txt_nettotal_amount = (TextView) dialogView.findViewById(R.id.txt_nettotal_amount);
         final Button btn_save_closeDrawer = (Button) dialogView.findViewById(R.id.btn_save_closeDrawer);
-
-
         //showing all available data
         try {
             String opening_time=null;
@@ -489,11 +479,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
             System.out.println("Summary Json Failed To Parse = "+s);
         }
 
-
-       // LabelledSpinner spinnerStatus = dialogView.findViewById(R.id.txt_customer_id);
-
-
-
         final ImageView summarystorebutton_close = (ImageView) dialogView.findViewById(R.id.summarystorebutton_close);
         summarystorebutton_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -501,7 +486,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 alertDialog.dismiss();
             }
         });
-
         btn_save_closeDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -510,16 +494,11 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 new getSaveCloseStore().execute();
             }
         });
-
         builder.setCancelable(false);
-
         alertDialog = builder.create();
         alertDialog.show();
-
-
     }
     public class getSaveCloseStore extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
             try {
@@ -530,7 +509,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_pos_drawerClose)
+                        .url(spre.Api_pos_drawerClose+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -586,29 +565,61 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         AlertDialog.Builder builder = new AlertDialog.Builder(actContext);
         builder.setView(dialogView);
 
+
+
+        LabelledSpinner spinnerStatus = dialogView.findViewById(R.id.txt_customer_id);
+        TextView loadingTxtCustomerData = dialogView.findViewById(R.id.loadingTxtCustomerData);
+        loadingTxtCustomerData.setVisibility(View.GONE);
         if(customerArray.size()==0){
+            loadingTxtCustomerData.setVisibility(View.VISIBLE);
             custData.clear();
             customerArray.clear();
-            new getCustomerData().execute();
-
+            spinnerStatus.setVisibility(View.GONE);
             customerArray.add("Select Customer");
             customerArray.add("Add New Customer");
             customerArray.add("No Customer");
-        }
 
-        LabelledSpinner spinnerStatus = dialogView.findViewById(R.id.txt_customer_id);
+            JSONObject row = null;
+            custData.clear();
+            CustomerData dataRows = new CustomerData();
+            dataRows.setId(900000000);
+            dataRows.setName("Select Customer");
+            custData.add(dataRows);
+
+            dataRows.setId(900000001);
+            dataRows.setName("Add New Customer");
+            custData.add(dataRows);
+
+            dataRows.setId(900000002);
+            dataRows.setName("No Customer");
+            custData.add(dataRows);
+
+            //spinnerStatus.setVisibility(View.GONE);
+            new getCustomerData().execute();
+
+
+
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                spre.SetToast(actContext,"Please wait, Customer data is loading...");
+                spinnerStatus.setVisibility(View.VISIBLE);
+                loadingTxtCustomerData.setVisibility(View.GONE);
+            }, 4000);
+
+
+        }
 
         spinnerStatus.setItemsArray(customerArray);
         spinnerStatus.setOnItemChosenListener(this);
 
+
+
+
         if(customerPositionID>1){
             spinnerStatus.setSelection(customerPositionID);
-            /*try {
-                customerID=custData.get(customerPositionID).getId();
-            }catch (Exception e){
-                e.printStackTrace();
-            }*/
-
+        }
+        else{
+            spinnerStatus.setSelection(0);
         }
 
         System.out.println(custData);
@@ -668,7 +679,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
     }
     public class getCustomerData extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
             try {
@@ -679,7 +689,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_customer_list)
+                        .url(spre.Api_customer_list+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -689,12 +699,17 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 return null;
             }
         }
-
+        protected void onPreExecute(){
+            super.onPreExecute();
+            spre.SetToast(actContext,"Loading customer, please wait...");
+        }
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             spre.checkUnauthenticated(s);
             System.out.println("Get customer = "+s);
             try {
+
+
                 spre.SetToast(actContext,"Please wait, Loading...");
                 JSONObject jsonObject=spre.perseJSONArray(s);
                 String data =null;
@@ -703,27 +718,10 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 JSONArray dataObject=new JSONArray(data);
                 System.out.println("Array Length = "+dataObject.length());
                 JSONObject row = null;
-                custData.clear();
-                CustomerData dataRows = new CustomerData();
-                dataRows.setId(900000000);
-                dataRows.setName("Select Customer");
-                custData.add(dataRows);
-
-                dataRows.setId(900000001);
-                dataRows.setName("Add New Customer");
-                custData.add(dataRows);
-
-                dataRows.setId(900000002);
-                dataRows.setName("No Customer");
-                custData.add(dataRows);
-
                 for(int i=0; i<=dataObject.length(); i++){
                     //System.out.println("JSON Sinle Array = "+dataObject.getJSONObject(i));
                     try {
-
                         row=dataObject.getJSONObject(i);
-
-
                         String nnm=row.getString("name").toString();
                         if(nnm.equals("No Customer")) {
 
@@ -733,7 +731,11 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                             CustomerData dataRow = new CustomerData();
                             dataRow.setId(row.getInt("id"));
                             dataRow.setName(row.getString("name"));
-
+                            dataRow.setAddress(row.getString("address"));
+                            dataRow.setPhone(row.getString("phone"));
+                            dataRow.setEmail(row.getString("email"));
+                            dataRow.setLast_invoice_no(row.getString("last_invoice_no"));
+                            dataRow.setCreated_at(row.getString("created_at"));
                             custData.add(dataRow);
                             customerArray.add(row.getString("name"));
                         }
@@ -741,6 +743,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         System.out.println("Failed to prase jsonARRAY"+dataObject.length());
                     }
                 }
+
             }catch (Exception e){
                 System.out.println("Json SPLITER Failed"+s);
             }
@@ -755,10 +758,13 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 String customer_address=params[1];
                 String customer_phone=params[2];
                 String customer_email=params[3];
+
+                String getLoggedToken=spre.getStr(spre.loggedAPIToken);
                 //setDefaults(LoggedName,Email,MainActivity.this);
                 //Utils.savSharedPreferences(MainActivity.this,new Login(Email, Password,null));
                 OkHttpClient client = new OkHttpClient();
                 RequestBody postData = new FormBody.Builder()
+                        .add("token",getLoggedToken)
                         .add("name",customer_name)
                         .add("address",customer_address)
                         .add("phone",customer_phone)
@@ -784,20 +790,13 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
             }
 
         }
-
         protected void onPreExecute(){
             super.onPreExecute();
-
-            Toast.makeText(actContext,"Processing please wait...",Toast.LENGTH_SHORT).show();
-
+            spre.SetToast(actContext,"Processing please wait...");
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-
             spre.checkUnauthenticated(s);
-            //System.out.println(s);
-            //Toast.makeText(CustomerAddActivity.this,"Response : "+s,Toast.LENGTH_SHORT).show();
             JSONObject jsonObject = spre.perseJSONArray(s);
             String status = null;
             String msg = null;
@@ -807,14 +806,10 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 msg = jsonObject.getString("msg");
                 customer_id = jsonObject.getInt("customer_id");
                 customerID=customer_id;
-                Toast.makeText(actContext,msg,Toast.LENGTH_SHORT).show();
-
+                spre.SetToast(actContext,msg);
             } catch (JSONException e) {
-                Toast.makeText(actContext,"Failed, Please try again.",Toast.LENGTH_SHORT).show();
+                spre.SetToast(actContext,"Failed, Please try again.");
             }
-
-
-
         }
     }
     /* Customer end */
@@ -1050,6 +1045,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 OkHttpClient client = new OkHttpClient();
 
                 RequestBody postData = new FormBody.Builder()
+                        .add("token",getLoggedToken)
                         .add("payout_amount",amount)
                         .add("payout_reason",reason)
                         .build();
@@ -1197,6 +1193,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .add("price",sold_price)
                         .add("cost",cost_price)
                         .add("detail",description)
+                        .add("token",getLoggedToken)
                         .build();
 
                 Request request = new Request.Builder()
@@ -1214,18 +1211,14 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 return null;
             }
         }
-
         protected void onPreExecute(){
             super.onPreExecute();
             spre.SetToast(actContext,"Processing please wait...");
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             System.out.println(s);
-
             spre.checkUnauthenticated(s);
-
             JSONObject jsonObject = spre.perseJSONArray(s);
             String status = null;
             String msg = null;
@@ -1242,27 +1235,18 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                     dataRow.setItemName(proTab.getString("name"));
                     dataRow.setItemPrice(proTab.getString("price"));
                     dataRow.setCateGoryName("General Sales");
-
                     dataRow.setItemQuantity(1);
                     posItemsData.add(dataRow);
-
                     setUpRecyleViewCart(posItemsData);
-
                     alertDialog.dismiss();
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }
 
-
                 spre.SetToast(actContext,msg);
-
             } catch (JSONException e) {
                 spre.SetToast(actContext,"Failed, Please try again.");
             }
-
-
-
         }
     }
     /* General Sales End  */
@@ -1299,7 +1283,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         new getCategoryData().execute();
     }
     public class getCategoryData extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
             try {
@@ -1310,7 +1293,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_category)
+                        .url(spre.Api_category+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
@@ -1320,7 +1303,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 return null;
             }
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             spre.checkUnauthenticated(s);
@@ -1386,6 +1368,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
                 RequestBody postData = new FormBody.Builder()
                         .add("category_id",catID)
+                        .add("token",getLoggedToken)
                         .build();
 
                 Request request = new Request.Builder()
@@ -1403,12 +1386,10 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 return null;
             }
         }
-
         protected void onPreExecute(){
             super.onPreExecute();
             spre.SetToast(actContext,"Processing please wait...");
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             spre.checkUnauthenticated(s);
@@ -1422,7 +1403,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 System.out.println("Array Length = "+dataObject.length());
                 JSONObject row = null;
                 //proData = new ArrayList<>();
-
                 cleanRecviewAndNotify();
                 for(int i=0; i<=dataObject.length(); i++){
                     //System.out.println("JSON Sinle Array = "+dataObject.getJSONObject(i));
@@ -1438,9 +1418,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         System.out.println("Failed to prase jsonARRAY"+dataObject.length());
                     }
                 }
-
-
-
                 setUpRecyleViewProduct();
             }catch (Exception e){
                 System.out.println("Json SPLITER Failed"+s);
@@ -1746,7 +1723,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
     }
     public class getTenderData extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... params) {
             try {
@@ -1757,7 +1733,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_pos_tender)
+                        .url(spre.Api_pos_tender+""+spre.setToken())
                         .build();
 
                 String result=null;
@@ -1773,7 +1749,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 return null;
             }
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             System.out.println("Get Tender = "+s);
@@ -1788,22 +1763,15 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 JSONArray dataObject=new JSONArray(data);
                 System.out.println("Array Length = "+dataObject.length());
                 JSONObject row = null;
-
-
-
                 for(int i=0; i<=dataObject.length(); i++){
                     //System.out.println("JSON Sinle Array = "+dataObject.getJSONObject(i));
                     try {
-
                         row=dataObject.getJSONObject(i);
-
                         TenderModel dataRow = new TenderModel();
                         dataRow.setTenderID(row.getInt("id"));
                         dataRow.setTenderName(row.getString("name"));
-
                         paymentDataArray.add(dataRow);
                         paymentShortArray.add(row.getString("name"));
-
                     }catch (Exception e){
                         System.out.println("Failed to prase jsonARRAY"+dataObject.length());
                     }
@@ -1825,9 +1793,8 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 String posItemData=params[4];
                 String invoiceID=params[5];
                 String AmountPaid=params[6];
-
                 System.out.println("Amount Paid send = "+AmountPaid);
-
+                String getLoggedToken=spre.getStr(spre.loggedAPIToken);
                 //setDefaults(LoggedName,Email,MainActivity.this);
                 //Utils.savSharedPreferences(MainActivity.this,new Login(Email, Password,null));
                 OkHttpClient client = new OkHttpClient();
@@ -1841,6 +1808,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                         .add("AmountPaid",AmountPaid)
                         .add("store_id",spre.loggedStoreIDKey)
                         .add("created_by",spre.loggedStoreIDKey)
+                        .add("token",getLoggedToken)
                         .build();
 
                 Request request = new Request.Builder()
@@ -1863,35 +1831,27 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
         protected void onPreExecute(){
             super.onPreExecute();
-
-            Toast.makeText(actContext,"Processing please wait...",Toast.LENGTH_SHORT).show();
-
+            spre.SetToast(actContext,"Processing please wait...");
         }
-
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             System.out.println(s);
             spre.checkUnauthenticated(s);
-            //System.out.println(s);
-            //Toast.makeText(CustomerAddActivity.this,"Response : "+s,Toast.LENGTH_SHORT).show();
             JSONObject jsonObject = spre.perseJSONArray(s);
             String status = null;
             String msg = null;
             try {
                 status = jsonObject.getString("status");
                 msg = jsonObject.getString("msg");
-                Toast.makeText(actContext,msg,Toast.LENGTH_SHORT).show();
-
+                spre.SetToast(actContext,msg);
                 posItemsData.clear();
                 customerID=0;
                 customerPositionID=0;
                 discountType=0;
                 discuntRate=0.00;
                 paymentID=0;
-
                 notifycartAdapter();
                 alertDialog.dismiss();
-
             } catch (JSONException e) {
                 Toast.makeText(actContext,"Failed, Please try again.",Toast.LENGTH_SHORT).show();
             }

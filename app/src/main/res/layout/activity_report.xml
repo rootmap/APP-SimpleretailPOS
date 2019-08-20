@@ -29,6 +29,18 @@
             design:titleTextColor="@color/white"
             android:background="@color/SimpleretailPOSThemeColor" />
 
+
+        <ImageButton
+            android:layout_width="37dp"
+            android:layout_height="35dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="11dp"
+            android:layout_marginRight="12dp"
+            android:id="@+id/reportBacktoHome"
+            android:background="@drawable/ic_home_white" />
+
+
         <RelativeLayout
             android:layout_below="@+id/toolbar"
             android:layout_margin="10dp"

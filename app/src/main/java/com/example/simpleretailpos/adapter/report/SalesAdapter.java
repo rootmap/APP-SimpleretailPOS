@@ -40,11 +40,11 @@ public class SalesAdapter  extends RecyclerView.Adapter<SalesAdapter.SalesViewHo
     @Override
     public void onBindViewHolder(@NonNull SalesViewHolder holder, int position) {
         holder.lead_from.setText("INV-"+mData.get(position).getInvoice_id());
-        holder.lead_created.setText("Invoice Date : "+mData.get(position).getInvoice_date());
+        holder.lead_created.setText(mData.get(position).getInvoice_date());
         holder.categoryName.setText(mData.get(position).getSold_to());
-        holder.txtPrice.setText("Payment Status : "+mData.get(position).getPayment_status());
-        holder.txtCost.setText("Tender : "+mData.get(position).getTender());
-        holder.totalAmount.setText("Total : $"+mData.get(position).getInvoice_total());
+        holder.txtPrice.setText(mData.get(position).getPayment_status());
+        holder.txtCost.setText(mData.get(position).getTender());
+        holder.totalAmount.setText("$"+mData.get(position).getInvoice_total());
     }
 
     @Override

@@ -15,12 +15,15 @@ import com.example.simpleretailpos.CustomerLeadActivity;
 import com.example.simpleretailpos.CustomerLeadListActivity;
 import com.example.simpleretailpos.CustomerListActivity;
 import com.example.simpleretailpos.DashboardActivity;
+import com.example.simpleretailpos.ExpenseActivity;
 import com.example.simpleretailpos.ExpenseCreateActivity;
 import com.example.simpleretailpos.ExpenseListActivity;
 import com.example.simpleretailpos.InventoryCreateActivity;
 import com.example.simpleretailpos.InventoryListActivity;
 import com.example.simpleretailpos.MainActivity;
+import com.example.simpleretailpos.PaymentActivity;
 import com.example.simpleretailpos.PosActivity;
+import com.example.simpleretailpos.ProfitActivity;
 import com.example.simpleretailpos.R;
 import com.example.simpleretailpos.ReportActivity;
 import com.example.simpleretailpos.SalesReportActivity;
@@ -44,36 +47,42 @@ public class TokenUtils {
         this.context = context;
     }
 
-    public final static String Api_baseUrl="http://192.168.0.5:8000";
-    public final static String Api_baseUrl_login=Api_baseUrl+"/api/login";
-    public final static String Api_baseUrl_logout=Api_baseUrl+"/api/logout";
-    public final static String Api_baseUrl_change_password=Api_baseUrl+"/api/change/password";
-    public final static String Api_baseUrl_logged_user_info=Api_baseUrl+"/api/user";
-    public final static String Api_customer_add=Api_baseUrl+"/api/customer/add";
-    public final static String Api_customer_add_return_id=Api_baseUrl+"/api/customer/return/id/add";
+    public final static String Api_baseUrl="http://androidapp.simpleretailpos.com/api";
+    public final static String Api_baseUrl_login=Api_baseUrl+"/login";
+    public final static String Api_baseUrl_logout=Api_baseUrl+"/logout";
+    public final static String Api_baseUrl_change_password=Api_baseUrl+"/change/password";
+    public final static String Api_baseUrl_logged_user_info=Api_baseUrl+"/user";
+    public final static String Api_customer_add=Api_baseUrl+"/customer/add";
+    public final static String Api_customer_add_return_id=Api_baseUrl+"/customer/return/id/add";
 
-    public final static String Api_customer_list=Api_baseUrl+"/api/customer/list";
-    public final static String Api_customer_lead=Api_baseUrl+"/api/customer/lead/save";
-    public final static String Api_customer_lead_list=Api_baseUrl+"/api/customer/lead/list";
+    public final static String Api_customer_list=Api_baseUrl+"/customer/list";
+    public final static String Api_customer_lead=Api_baseUrl+"/customer/lead/save";
+    public final static String Api_customer_lead_list=Api_baseUrl+"/customer/lead/list";
 
-    public final static String Api_product_save=Api_baseUrl+"/api/product/save";
-    public final static String Api_product_list=Api_baseUrl+"/api/product/list";
-    public final static String Api_product_by_category=Api_baseUrl+"/api/product/category/wise";
+    public final static String Api_product_save=Api_baseUrl+"/product/save";
+    public final static String Api_product_list=Api_baseUrl+"/product/list";
+    public final static String Api_product_by_category=Api_baseUrl+"/product/category/wise";
 
-    public final static String Api_expense_head=Api_baseUrl+"/api/expense/head";
-    public final static String Api_expense_save=Api_baseUrl+"/api/expense/voucher/save";
-    public final static String Api_expense_list=Api_baseUrl+"/api/expense/voucher";
-    public final static String Api_sales_report=Api_baseUrl+"/api/sales/report";
-    public final static String Api_category=Api_baseUrl+"/api/category";
+    public final static String Api_expense_head=Api_baseUrl+"/expense/head";
+    public final static String Api_expense_save=Api_baseUrl+"/expense/voucher/save";
+    public final static String Api_expense_list=Api_baseUrl+"/expense/voucher";
+    public final static String Api_sales_report=Api_baseUrl+"/sales/report";
+    public final static String Api_profit_report=Api_baseUrl+"/profit/report";
+    public final static String Api_payment_report=Api_baseUrl+"/payment/report";
+    public final static String Api_expense_voucher_report=Api_baseUrl+"/expense/voucher/report";
 
-    public final static String Api_pos_general_sales=Api_baseUrl+"/api/pos/general/sales/save";
-    public final static String Api_pos_payout=Api_baseUrl+"/api/pos/payout";
-    public final static String Api_pos_tender=Api_baseUrl+"/api/pos/tender";
-    public final static String Api_pos_completeSales=Api_baseUrl+"/api/pos/completesales";
-    public final static String Api_pos_drawer=Api_baseUrl+"/api/pos/drawer";
-    public final static String Api_pos_opendrawer=Api_baseUrl+"/api/pos/open/drawer";
-    public final static String Api_pos_drawerSummary=Api_baseUrl+"/api/pos/summary/drawer";
-    public final static String Api_pos_drawerClose=Api_baseUrl+"/api/pos/close/drawer";
+
+
+    public final static String Api_category=Api_baseUrl+"/category";
+
+    public final static String Api_pos_general_sales=Api_baseUrl+"/pos/general/sales/save";
+    public final static String Api_pos_payout=Api_baseUrl+"/pos/payout";
+    public final static String Api_pos_tender=Api_baseUrl+"/pos/tender";
+    public final static String Api_pos_completeSales=Api_baseUrl+"/pos/completesales";
+    public final static String Api_pos_drawer=Api_baseUrl+"/pos/drawer";
+    public final static String Api_pos_opendrawer=Api_baseUrl+"/pos/open/drawer";
+    public final static String Api_pos_drawerSummary=Api_baseUrl+"/pos/summary/drawer";
+    public final static String Api_pos_drawerClose=Api_baseUrl+"/pos/close/drawer";
 
     public final static String loggedAPIToken = "access_token";
     public final static String loggedAPIRefreshToken = "refresh_token";
@@ -82,6 +91,8 @@ public class TokenUtils {
     public final static String loggedUserData = "loggedUserData";
     public final static String PREFS_NAME = "appname_prefs";
     public static Double DEFAULTDISCOUNTRATE = 0.00;
+
+    public final static String Api_concat_token="?token=";
 
     public TextView responseTextFromAPI;
 
@@ -177,6 +188,22 @@ public class TokenUtils {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         context.getApplicationContext().startActivity(intent);
     }
+    public void ProfitReportLink(Context context){
+        Intent intent = new Intent(context, ProfitActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.getApplicationContext().startActivity(intent);
+    }
+    public void PaymentReportLink(Context context){
+        Intent intent = new Intent(context, PaymentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.getApplicationContext().startActivity(intent);
+    }
+    public void ExpenseReportLink(Context context){
+        Intent intent = new Intent(context, ExpenseActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        context.getApplicationContext().startActivity(intent);
+    }
+
     public void POSLink(Context context){
         Intent intent = new Intent(context, PosActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -199,7 +226,15 @@ public class TokenUtils {
                         break;
                     case R.id.bnm_report_profit:
                         SetToast(actContext,"Loading...");
-                        InventoryListLink(actContext);
+                        ProfitReportLink(actContext);
+                        break;
+                    case R.id.bnm_report_payment:
+                        SetToast(actContext,"Loading...");
+                        PaymentReportLink(actContext);
+                        break;
+                    case R.id.bnm_expense_report_home:
+                        SetToast(actContext,"Loading...");
+                        ExpenseReportLink(actContext);
                         break;
                 }
 
@@ -282,7 +317,7 @@ public class TokenUtils {
         try {
             String dft=row.getString("error");
             System.out.println("Refresh Response = "+dft);
-            if(dft.equals("Unauthenticated.")){
+            if(!dft.isEmpty()){
                 setStr("redirect_login","true");
                 LoginLink(context);
             }
@@ -290,5 +325,9 @@ public class TokenUtils {
             System.out.println("Failed Refresh Response = "+row);
         }
     }
+    public static String setToken(){
+        return Api_concat_token+""+getStr(loggedAPIToken);
+    }
+    public static String setRawToken(){ return getStr(loggedAPIToken); }
 
 }

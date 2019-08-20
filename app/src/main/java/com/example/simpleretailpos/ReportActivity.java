@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,10 +22,38 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         LinearLayout sales_report_lin=(LinearLayout) findViewById(R.id.sales_report_lin);
+        LinearLayout profitReportLinearLink=(LinearLayout) findViewById(R.id.profitReportLinearLink);
+        LinearLayout paymentReportLinearLink=(LinearLayout) findViewById(R.id.paymentReportLinearLink);
+        LinearLayout expenseReportLinearLink=(LinearLayout) findViewById(R.id.expenseReportLinearLink);
+        ImageButton reportBacktoHome=(ImageButton) findViewById(R.id.reportBacktoHome);
         sales_report_lin.setOnClickListener(new View.OnClickListener() {
             @Override
              public void onClick(View view) {
                 spre.SalesReportLink(actContext);
+            }
+        });
+        profitReportLinearLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+             public void onClick(View view) {
+                spre.ProfitReportLink(actContext);
+            }
+        });
+        paymentReportLinearLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+             public void onClick(View view) {
+                spre.PaymentReportLink(actContext);
+            }
+        });
+        expenseReportLinearLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+             public void onClick(View view) {
+                spre.ExpenseReportLink(actContext);
+            }
+        });
+        reportBacktoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spre.DashboardLink(actContext);
             }
         });
     }

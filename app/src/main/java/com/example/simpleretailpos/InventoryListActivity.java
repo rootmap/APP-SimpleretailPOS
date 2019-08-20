@@ -116,9 +116,9 @@ public class InventoryListActivity extends AppCompatActivity {
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_product_list)
+                        .url(spre.Api_product_list+""+spre.setToken())
                         .build();
-
+                System.out.println(spre.Api_product_list+""+spre.setToken());
                 Response response = client.newCall(request).execute();
                 String result = response.body().string();
 

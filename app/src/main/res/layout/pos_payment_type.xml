@@ -48,163 +48,169 @@
             android:background="@drawable/ic_close_white_24dp" />
 
     </RelativeLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:hintTextAppearance="@style/EditTextTheme"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintAnimationEnabled="true"
-            android:textColorHint="@color/colorPrimary">
 
-            <EditText
-                android:id="@+id/txt_invoice_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Invoice ID "
-                android:inputType="text"
-                android:enabled="false"
-                android:textSize="10sp"
-                android:theme="@style/EditTextTheme" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:hintTextAppearance="@style/EditTextTheme"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintAnimationEnabled="true"
-            android:textColorHint="@color/colorPrimary">
-
-
-            <com.satsuware.usefulviews.LabelledSpinner
-                android:id="@+id/txt_payment_id"
-                style="@style/EditTextTheme"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:theme="@style/EditTextTheme"
-                app:labelText="Select Payment Method"
-                app:widgetColor="@color/colorPrimary"/>
-
-
-
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:hintTextAppearance="@style/EditTextTheme"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintAnimationEnabled="true"
-            android:textColorHint="@color/colorPrimary">
-
-            <EditText
-                android:id="@+id/txt_netPayable_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Total Payable"
-                android:inputType="text"
-                android:clickable="false"
-                android:textSize="20sp"
-                android:theme="@style/EditTextTheme" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:hintTextAppearance="@style/EditTextTheme"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintAnimationEnabled="true"
-            android:textColorHint="@color/colorPrimary">
-
-            <EditText
-                android:id="@+id/txt_Amount_paid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Received Amount"
-                android:theme="@style/EditTextTheme"
-                android:inputType="text"
-                android:textSize="20sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:hintTextAppearance="@style/EditTextTheme"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintAnimationEnabled="true"
-            android:textColorHint="@color/colorPrimary">
-
-            <EditText
-                android:id="@+id/txt_due_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Due Amount"
-                android:theme="@style/EditTextTheme"
-                android:inputType="text"
-                android:textSize="20sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            app:hintTextAppearance="@style/EditTextTheme"
-            app:boxStrokeColor="@color/colorPrimary"
-            app:hintAnimationEnabled="true"
-            android:textColorHint="@color/colorPrimary">
-
-            <EditText
-                android:id="@+id/txt_change_return_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Change Return Amount"
-                android:theme="@style/EditTextTheme"
-                android:inputType="text"
-                android:textSize="20sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
-            android:layout_marginTop="40dp"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btn_save_invoice"
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/button_primary"
-                android:drawableLeft="@drawable/ic_save_black_24dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:pointerIcon="hand"
-                android:text=" Complete Sales"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
-        </LinearLayout>
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:hintTextAppearance="@style/EditTextTheme"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintAnimationEnabled="true"
+                android:textColorHint="@color/colorPrimary">
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/txt_invoice_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Invoice ID "
+                    android:inputType="text"
+                    android:enabled="false"
+                    android:textSize="10sp"
+                    android:theme="@style/EditTextTheme" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:hintTextAppearance="@style/EditTextTheme"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintAnimationEnabled="true"
+                android:textColorHint="@color/colorPrimary">
+
+
+                <com.satsuware.usefulviews.LabelledSpinner
+                    android:id="@+id/txt_payment_id"
+                    style="@style/EditTextTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:theme="@style/EditTextTheme"
+                    app:labelText="Select Payment Method"
+                    app:widgetColor="@color/colorPrimary"/>
+
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:hintTextAppearance="@style/EditTextTheme"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintAnimationEnabled="true"
+                android:textColorHint="@color/colorPrimary">
+
+                <EditText
+                    android:id="@+id/txt_netPayable_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Total Payable"
+                    android:inputType="text"
+                    android:clickable="false"
+                    android:textSize="20sp"
+                    android:theme="@style/EditTextTheme" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:hintTextAppearance="@style/EditTextTheme"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintAnimationEnabled="true"
+                android:textColorHint="@color/colorPrimary">
+
+                <EditText
+                    android:id="@+id/txt_Amount_paid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Received Amount"
+                    android:theme="@style/EditTextTheme"
+                    android:inputType="text"
+                    android:textSize="20sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:hintTextAppearance="@style/EditTextTheme"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintAnimationEnabled="true"
+                android:textColorHint="@color/colorPrimary">
+
+                <EditText
+                    android:id="@+id/txt_due_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Due Amount"
+                    android:theme="@style/EditTextTheme"
+                    android:inputType="text"
+                    android:textSize="20sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                app:hintTextAppearance="@style/EditTextTheme"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintAnimationEnabled="true"
+                android:textColorHint="@color/colorPrimary">
+
+                <EditText
+                    android:id="@+id/txt_change_return_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Change Return Amount"
+                    android:theme="@style/EditTextTheme"
+                    android:inputType="text"
+                    android:textSize="20sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_marginTop="40dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_save_invoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/button_primary"
+                    android:drawableLeft="@drawable/ic_save_black_24dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:pointerIcon="hand"
+                    android:text=" Complete Sales"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>

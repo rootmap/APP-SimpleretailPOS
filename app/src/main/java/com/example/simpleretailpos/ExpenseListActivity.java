@@ -113,7 +113,7 @@ public class ExpenseListActivity extends AppCompatActivity {
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
-                        .url(spre.Api_expense_list)
+                        .url(spre.Api_expense_list+""+spre.setToken())
                         .build();
 
                 Response response = client.newCall(request).execute();
