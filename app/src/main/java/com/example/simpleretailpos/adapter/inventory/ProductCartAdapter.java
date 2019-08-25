@@ -1,28 +1,29 @@
 package com.example.simpleretailpos.adapter.inventory;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.ImageView;
+        import android.widget.LinearLayout;
+        import android.widget.RelativeLayout;
+        import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+        import androidx.annotation.NonNull;
+        import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simpleretailpos.PosActivity;
 import com.example.simpleretailpos.R;
-import com.example.simpleretailpos.model.InventoryData;
+        import com.example.simpleretailpos.model.ProductFIlteredData;
 
-import java.util.List;
+        import java.util.List;
 
-public class ProductAdapter  extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
-    private static final String TAG = "ProductAdapter";
+public class ProductCartAdapter  extends RecyclerView.Adapter<ProductCartAdapter.ProductViewHolder> {
+    private static final String TAG = "ProductCartAdapter";
     private Context mContext;
-    private List<InventoryData> mData;
+    private List<ProductFIlteredData> mData;
 
-    public ProductAdapter(Context mContext, List<InventoryData> mData) {
+    public ProductCartAdapter(Context mContext, List<ProductFIlteredData> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -32,14 +33,15 @@ public class ProductAdapter  extends RecyclerView.Adapter<ProductAdapter.Product
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        view = inflater.inflate(R.layout.pos_category_product_recyler,parent,false);
+        view = inflater.inflate(R.layout.pos_search_product_result_recyler,parent,false);
 
-        return new ProductAdapter.ProductViewHolder(view);
+        return new ProductCartAdapter.ProductViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        holder.catName.setText(mData.get(position).getName());
+        holder.res_product.setText(mData.get(position).getId()+". "+mData.get(position).getName());
+        holder.res_price.setText("$"+mData.get(position).getPrice());
 
         holder.lin1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +74,7 @@ public class ProductAdapter  extends RecyclerView.Adapter<ProductAdapter.Product
 
                 String productCat=null;
                 try{
-                    productCat=mData.get(position).getCategory_name();
+                    productCat=mData.get(position).getCatName();
                 }catch (Exception e){
                     System.out.println("Product cat got Empty.");
                 }
@@ -90,14 +92,18 @@ public class ProductAdapter  extends RecyclerView.Adapter<ProductAdapter.Product
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView catName;
-        RelativeLayout parentLayout;
+        TextView res_product,res_price;
+        RelativeLayout pos_search_product_recyler_layout;
         LinearLayout lin1;
+        ImageView res_image;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            catName = itemView.findViewById(R.id.catName);
-            parentLayout = itemView.findViewById(R.id.parent_layout);
+            res_product = itemView.findViewById(R.id.res_product);
+            res_price = itemView.findViewById(R.id.res_price);
+            pos_search_product_recyler_layout = itemView.findViewById(R.id.pos_search_product_recyler_layout);
             lin1 = itemView.findViewById(R.id.lin1);
+            res_image = itemView.findViewById(R.id.res_image);
         }
     }
 }
+

@@ -204,6 +204,14 @@ public class CustomerLeadActivity extends AppCompatActivity {
     private void filter(String searchStr) {
         //new array list that will hold the filtered data
         newProducts.clear();
+
+
+        if(newProducts.size()>0){
+            for (Integer i=0; i<newProducts.size(); i++){
+                newProducts.remove(i);
+            }
+        }
+
         ArrayList<CustomerSpinnerModel> newProducts = new ArrayList<>();
         for (CustomerSpinnerModel s : products) {
             if (s.getName().toLowerCase().contains(searchStr.toLowerCase())) {

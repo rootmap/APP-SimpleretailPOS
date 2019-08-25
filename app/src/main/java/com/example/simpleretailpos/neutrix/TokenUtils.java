@@ -312,17 +312,34 @@ public class TokenUtils {
 
         }
     }
+
+    public void connectInternet(){
+        SetToast(context,"Please connect internet !!!");
+        setStr("redirect_login","true");
+        LoginLink(context);
+    }
+
     public void checkUnauthenticated(String s){
+        System.out.println("checkUnauthenticated String / JSON = "+s);
         JSONObject row=perseJSONArray(s);
         try {
-            String dft=row.getString("error");
-            System.out.println("Refresh Response = "+dft);
+            String dft=null;
+            try{
+                dft=row.getString("error");
+
+            }catch (JSONException e){
+                System.out.println("Active Response = "+row);
+            }
+
+            System.out.println("Error Response Found = "+dft);
             if(!dft.isEmpty()){
                 setStr("redirect_login","true");
+
                 LoginLink(context);
             }
-        } catch (JSONException e) {
-            System.out.println("Failed Refresh Response = "+row);
+
+        } catch (Exception r) {
+            System.out.println("Error Resposne Not Found In = "+s);
         }
     }
     public static String setToken(){

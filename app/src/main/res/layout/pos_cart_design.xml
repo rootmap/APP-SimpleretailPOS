@@ -6,7 +6,7 @@
     android:id="@+id/posSummaryCartLayout"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border_set"
@@ -14,16 +14,71 @@
 
         <TextView
             android:id="@+id/shoppingCart"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
             android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:text="Shopping Cart Summary"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+
+            <EditText
+                android:theme="@style/EditTextTheme"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:drawableLeft="@drawable/ic_search_simpleretail"
+                android:hint="Search Product"
+                android:id="@+id/searchProductCart"/>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/cartProductLin"
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_set"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/defSearchProductNoRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=" No result found with your search "
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/posCartDesignProductRecView"
+            android:layout_width="match_parent"
+            android:layout_height="371dp"
+            android:layout_alignParentStart="true"
+
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="fill_horizontal">
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <Button
+            android:id="@+id/hideSearchResult"
+            android:drawableLeft="@drawable/ic_cancel_simpleretail_clear"
+            android:text="Hide Search Result"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/cartItemLin"
         android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,6 +96,7 @@
             </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/equationSummary"
         android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -32,12 +32,14 @@ import android.widget.Toast;
 
 import com.example.simpleretailpos.adapter.customer.CategoryAdapter;
 import com.example.simpleretailpos.adapter.inventory.ProductAdapter;
+import com.example.simpleretailpos.adapter.inventory.ProductCartAdapter;
 import com.example.simpleretailpos.adapter.pos.PosItemAdapter;
 import com.example.simpleretailpos.model.CategoryData;
 import com.example.simpleretailpos.model.CustomerData;
 import com.example.simpleretailpos.model.InventoryData;
 import com.example.simpleretailpos.model.PosItem;
 import com.example.simpleretailpos.listener.RecyclerTouchListener;
+import com.example.simpleretailpos.model.ProductFIlteredData;
 import com.example.simpleretailpos.model.TenderModel;
 import com.example.simpleretailpos.neutrix.TokenUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,12 +51,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.lang.reflect.Array;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,6 +96,9 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     @BindView(R.id.pos_product_recyclerv_view)
     RecyclerView pos_product_recyclerv_view;
 
+    @BindView(R.id.posCartDesignProductRecView)
+    RecyclerView posCartDesignProductRecView;
+
     @BindView(R.id.sltProductLevel)
     TextView sltProductLevel;
 
@@ -108,6 +116,30 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
     @BindView(R.id.imgBacktoHome)
     ImageView imgBacktoHome;
+
+    @BindView(R.id.searchProductCart)
+    EditText searchProductCart;
+
+    @BindView(R.id.cartProductLin)
+    LinearLayout cartProductLin;
+
+
+    @BindView(R.id.cartItemLin)
+    LinearLayout cartItemLin;
+
+    @BindView(R.id.lin4)
+    LinearLayout lin4;
+
+    @BindView(R.id.equationSummary)
+    LinearLayout equationSummary;
+
+
+    @BindView(R.id.hideSearchResult)
+    Button hideSearchResult;
+
+
+    @BindView(R.id.defSearchProductNoRecord)
+    TextView defSearchProductNoRecord;
 
 
 
@@ -137,6 +169,8 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     private Integer paymentID=0;
     private Integer DrawerStatus=0;
 
+    private List<InventoryData> allProduct;
+    private List<ProductFIlteredData> filteredProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,13 +192,74 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         posItemsData = new ArrayList<>();
         pos_category_recyclerv_view = findViewById(R.id.pos_category_recyclerv_view);
         pos_product_recyclerv_view = findViewById(R.id.pos_product_recyclerv_view);
+        posCartDesignProductRecView = findViewById(R.id.posCartDesignProductRecView);
+        hideSearchResult = findViewById(R.id.hideSearchResult);
+        cartItemLin = findViewById(R.id.cartItemLin);
+        cartProductLin = findViewById(R.id.cartProductLin);
+        lin4 = findViewById(R.id.lin4);
         imgBacktoHome = findViewById(R.id.imgBacktoHome);
+        equationSummary = findViewById(R.id.equationSummary);
+        defSearchProductNoRecord = findViewById(R.id.defSearchProductNoRecord);
         imgBacktoHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 spre.DashboardLink(actContext);
             }
         });
+
+        hideSearchResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleShoppingCartWithProduct();
+            }
+        });
+
+        searchProductCart = findViewById(R.id.searchProductCart);
+        allProduct = new ArrayList<>();
+        searchProductCart.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+                if(charSequence.length()>0){
+                    equationSummary.setVisibility(View.GONE);
+                    cartItemLin.setVisibility(View.GONE);
+                    cartProductLin.setVisibility(View.VISIBLE);
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> {
+                        //Do something after 100ms
+                        getProductSuggestion(charSequence.toString());
+                    }, 100);
+
+                }else {
+                    equationSummary.setVisibility(View.VISIBLE);
+                    cartItemLin.setVisibility(View.VISIBLE);
+                    cartProductLin.setVisibility(View.GONE);
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //searchProductCart.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_search), null, getResources().getDrawable(R.drawable.ic_cancel_simpleretail_clear), null);
+            }
+        });
+
+        /*searchProductCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                equationSummary.setVisibility(View.GONE);
+                cartItemLin.setVisibility(View.GONE);
+                cartProductLin.setVisibility(View.VISIBLE);
+            }
+        });*/
 
         posCartDesignRecView = findViewById(R.id.posCartDesignRecView);
         posTopNavBot=findViewById(R.id.posTopNavBot);
@@ -225,6 +320,173 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
     }
 
+    private boolean containsProductInFIlterItem(List<ProductFIlteredData> list, Integer name) {
+        for (ProductFIlteredData item : list) {
+            if (item.getId().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void getProductSuggestion(String search) {
+        filteredProduct = new ArrayList<>();
+        if(allProduct.size()>0){
+
+            filteredProduct.clear();
+        }else{
+            //filteredProduct.clear();
+            //allProduct.clear();
+            new getAllProductData().execute();
+        }
+
+        filteredProduct = new ArrayList<>();
+        if(filteredProduct.size()>0){
+            for (Integer i=0; i<filteredProduct.size(); i++){
+                filteredProduct.remove(i);
+            }
+        }
+        filteredProduct.clear();
+        filteredProduct = new ArrayList<>();
+        for (InventoryData s : allProduct) {
+            if (s.getName().toLowerCase().contains(search.toLowerCase())) {
+                System.out.println(s.getName().toString());
+                ProductFIlteredData row = new ProductFIlteredData();
+                row.setId(s.getId());
+                row.setName(s.getName());
+                row.setCatName(s.getCategory_name());
+                row.setPrice(s.getPrice());
+                if(!containsProductInFIlterItem(filteredProduct,s.getId())) {
+                    filteredProduct.add(row);
+                }
+            }
+        }
+
+
+
+
+        System.out.println("Product Item Found = "+filteredProduct.size());
+        setUPProductReceSearch(filteredProduct);
+
+    }
+
+    private void setUPProductReceSearch(List<ProductFIlteredData> filteredProduct) {
+
+        if(filteredProduct.size()==0){
+            posCartDesignProductRecView.setVisibility(View.GONE);
+            defSearchProductNoRecord.setVisibility(View.VISIBLE);
+        }else{
+            posCartDesignProductRecView.setVisibility(View.VISIBLE);
+            defSearchProductNoRecord.setVisibility(View.GONE);
+        }
+
+
+        ProductCartAdapter resProductAdapter = new ProductCartAdapter(this,filteredProduct);
+        posCartDesignProductRecView.setLayoutManager(new LinearLayoutManager(this));
+        posCartDesignProductRecView.setAdapter(resProductAdapter);
+        /*final Integer[] countCLick = {0};
+        posCartDesignProductRecView.addOnItemTouchListener(new RecyclerItemClickListener(this, (view, position) -> {
+            Log.d("TAG", "position: " + position);
+            countCLick[0] =1;
+            if (countCLick.length>0){
+                break;
+            }
+            //pos_category_recyclerv_view.setVisibility(View.GONE);
+
+        }));*/
+
+        resProductAdapter.notifyDataSetChanged();
+
+
+
+    }
+
+    public class getAllProductData extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String getLoggedToken=spre.getStr(spre.loggedAPIToken);
+                TokenUtils spre = new TokenUtils(actContext);
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .header("User-Agent", "OkHttp Headers.java")
+                        .addHeader("Accept", "application/json; q=0.5")
+                        .addHeader("Authorization", "Bearer "+getLoggedToken)
+                        .url(spre.Api_product_list+""+spre.setToken())
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                String result = response.body().string();
+                return result;
+            }catch (Exception ex){
+                return null;
+            }
+        }
+        protected void onPreExecute(){
+            super.onPreExecute();
+            spre.SetToast(actContext,"Loading product, please wait...");
+        }
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            spre.checkUnauthenticated(s);
+            System.out.println("Get product = "+s);
+            try {
+                JSONObject jsonObject=spre.perseJSONArray(s);
+                String data =null;
+                data=jsonObject.getString("data");
+                System.out.println("Parse Successful = "+data);
+
+                JSONArray dataObject=new JSONArray(data);
+                System.out.println("Array Length = "+dataObject.length());
+                JSONObject row = null;
+                for(int i=0; i<=dataObject.length(); i++){
+
+                    try {
+                        row=dataObject.getJSONObject(i);
+                        InventoryData dataRow = new InventoryData();
+                        dataRow.setId(row.getInt("id"));
+                        dataRow.setCategory_name(row.getString("category_name"));
+                        dataRow.setName(row.getString("name"));
+                        dataRow.setQuantity(row.getString("quantity"));
+                        dataRow.setPrice(row.getString("price"));
+                        dataRow.setCost(row.getString("cost"));
+                        dataRow.setCreated_at(row.getString("created_at"));
+
+                        allProduct.add(dataRow);
+
+                    }catch (Exception e){
+                        System.out.println("Failed to prase jsonARRAY"+dataObject.length());
+                    }
+
+                }
+
+            }catch (Exception e){
+                System.out.println("Json SPLITER Failed"+s);
+            }
+        }
+    }
+
+    private void toggleShoppingCartWithProduct(){
+
+
+
+        if (equationSummary.getVisibility() == View.VISIBLE) {
+            equationSummary.setVisibility(View.GONE);
+            cartItemLin.setVisibility(View.GONE);
+            cartProductLin.setVisibility(View.VISIBLE);
+
+            //cartItemLin.setVisibility(View.GONE);
+            //cartProductLin.setVisibility(View.VISIBLE);
+        }else{
+            equationSummary.setVisibility(View.VISIBLE);
+            cartItemLin.setVisibility(View.VISIBLE);
+            cartProductLin.setVisibility(View.GONE);
+
+        }
+
+        searchProductCart.setText(null);
+    }
+
     /*Drawer Status Start*/
     private void checkDrawerStatus() {
         new getDrawerData().execute();
@@ -237,14 +499,20 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                 String getLoggedToken=spre.getStr(spre.loggedAPIToken);
                 TokenUtils spre = new TokenUtils(actContext);
                 OkHttpClient client = new OkHttpClient();
+                System.out.println("Requesting Drawer URL = "+spre.Api_pos_drawer+""+spre.setToken());
                 Request request = new Request.Builder()
                         .header("User-Agent", "OkHttp Headers.java")
                         .addHeader("Accept", "application/json; q=0.5")
                         .addHeader("Authorization", "Bearer "+getLoggedToken)
                         .url(spre.Api_pos_drawer+""+spre.setToken())
                         .build();
+                Response response =null;
+                try{
+                    response = client.newCall(request).execute();
+                }catch (Exception e){
+                    spre.connectInternet();
+                }
 
-                Response response = client.newCall(request).execute();
                 String result = response.body().string();
                 return result;
             }catch (Exception ex){
@@ -596,8 +864,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
             //spinnerStatus.setVisibility(View.GONE);
             new getCustomerData().execute();
-
-
 
             Handler handler = new Handler();
             handler.postDelayed(() -> {
@@ -1437,50 +1703,65 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         pos_product_recyclerv_view.setLayoutManager(new LinearLayoutManager(this));
         pos_product_recyclerv_view.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         pos_product_recyclerv_view.setAdapter(productAdapter);
-        pos_product_recyclerv_view.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), pos_product_recyclerv_view, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                if(containsCartItem(posItemsData,proData.get(position).getId())){
-                    Log.d("TAG", "Alreay Product Exists: " + position);
-                }
-                else
-                {
-                    Log.d("TAG", "Product position: " + position);
-                    //pos_category_recyclerv_view.setVisibility(View.GONE);
-                    // posCategoryWindow.setVisibility(View.GONE);
-                    // posSummaryCartLayout.setVisibility(View.GONE);
-                    //  System.out.println("Product Array Name ="+catData.get(position).getName());
-                    //  sltProductLevel.setText("SELECT "+catData.get(position).getName().toUpperCase()+" PRODUCT");
-                    posProductWindow.setVisibility(View.GONE);
-                    posSummaryCartLayout.setVisibility(View.VISIBLE);
+//        pos_product_recyclerv_view.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), pos_product_recyclerv_view, new RecyclerTouchListener.ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                if(containsCartItem(posItemsData,proData.get(position).getId())){
+//                    Log.d("TAG", "Alreay Product Exists: " + position);
+//                }
+//                else
+//                {
+//                    Log.d("TAG", "Product position: " + position);
+//                    posProductWindow.setVisibility(View.GONE);
+//                    posSummaryCartLayout.setVisibility(View.VISIBLE);
+//
+//                    System.out.println("Product table Position Price ="+proData.get(position).getPrice());
+//
+//                    PosItem dataRow = new PosItem();
+//                    dataRow.setItemId(proData.get(position).getId());
+//                    dataRow.setItemName(proData.get(position).getName());
+//                    dataRow.setItemPrice(proData.get(position).getPrice());
+//                    dataRow.setCateGoryName(proData.get(position).getCategory_name());
+//                    dataRow.setItemQuantity(1);
+//                    posItemsData.add(dataRow);
+//
+//                    setUpRecyleViewCart(posItemsData);
+//
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//
+//            }
+//        }));
 
-                    System.out.println("Product table Position Price ="+proData.get(position).getPrice());
-
-                    PosItem dataRow = new PosItem();
-                    dataRow.setItemId(proData.get(position).getId());
-                    dataRow.setItemName(proData.get(position).getName());
-                    dataRow.setItemPrice(proData.get(position).getPrice());
-                    dataRow.setCateGoryName(proData.get(position).getCategory_name());
-                    dataRow.setItemQuantity(1);
-                    posItemsData.add(dataRow);
-
-                    setUpRecyleViewCart(posItemsData);
-
-
-                }
-
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-        /*pos_product_recyclerv_view.addOnItemTouchListener(new RecyclerItemClickListener(this, (view, position) -> {
-
-        }));*/
         productAdapter.notifyDataSetChanged();
     }
+
+    public void bindDataFromSearchProductAdapter(Integer id,String name,String price, String catName){
+        try {
+            spre.SetToast(actContext,name+" added in cart successfully.");
+            PosItem dataRow = new PosItem();
+            dataRow.setItemId(id);
+            dataRow.setItemName(name);
+            dataRow.setItemPrice(price);
+            dataRow.setCateGoryName(catName);
+            dataRow.setItemQuantity(1);
+            posItemsData.add(dataRow);
+
+            setUpRecyleViewCart(posItemsData);
+            System.out.println("Execution Successful from adapter!!!");
+        }catch (Exception e){
+            System.out.println("Execution failed from adapter!!!");
+        }
+
+
+
+    }
+
     /*Product Load End*/
 
     /* checking data start */
