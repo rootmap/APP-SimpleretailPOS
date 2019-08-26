@@ -137,7 +137,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     @BindView(R.id.hideSearchResult)
     Button hideSearchResult;
 
-
     @BindView(R.id.defSearchProductNoRecord)
     TextView defSearchProductNoRecord;
 
@@ -1777,7 +1776,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
     /* Load cart adapter based on arrayItemData start*/
     private void setUpRecyleViewCart(List<PosItem> posItemsData) {
-        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData);
+        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData,posCartDesignRecView);
 
         posCartDesignRecView.setLayoutManager(new LinearLayoutManager(this));
         posCartDesignRecView.setAdapter(cartAdapter);
@@ -1789,6 +1788,26 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
     /* Load cart adapter based on arrayItemData end*/
 
     /* Load cart sumTotal start */
+
+    public void updatepriceQtyFromAdapter(Integer position, Integer Qty, String price){
+        PosItem row = new PosItem();
+        row.setItemId(posItemsData.get(position).getItemId());
+        row.setItemName(posItemsData.get(position).getItemName());
+        row.setCateGoryName(posItemsData.get(position).getCateGoryName());
+        row.setItemQuantity(Qty);
+        row.setItemPrice(price);
+
+        int index = position;
+        posItemsData.set(index, row);
+
+        PosItemAdapter adapter = new PosItemAdapter(actContext, posItemsData,posCartDesignRecView);
+        posCartDesignRecView.setAdapter(adapter);
+        adapter.notifyItemChanged(position,row);
+
+        checkNSum();
+
+    }
+
     public void checkNSum(){
         //posSubtotal
         Double subtotal=0.00;
@@ -1799,13 +1818,18 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         String discountText="$0.00";
 
 
-
         if(posItemsData.size()>0){
             for (PosItem item : posItemsData) {
                 System.out.println(item.getItemPrice());
                 String itmPrice=item.getItemPrice();
-                subtotal+=Double.parseDouble(itmPrice);
+                Integer itmQty=item.getItemQuantity();
+
+                Double rowTotal=itmQty * Double.parseDouble(itmPrice);
+
+                subtotal+=Double.parseDouble(rowTotal.toString());
             }
+
+
 
 
             if(subtotal>0){
@@ -1813,15 +1837,11 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
             }
 
             if(discountType>0){
-
-
-
                 if(discountType==2){
                     if(subtotal>0){
                         discountAmount = (subtotal * discuntRate)/100;
                     }
                     discountText = "$"+discountAmount+"("+discuntRate+"%)";
-
                 }
                 else{
                     if(subtotal>0){
@@ -1829,12 +1849,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
                     }
                     discountText = "$"+discountAmount;
                 }
-
-
             }
-
-
-
 
             if(subtotal>0){
                 netPayableAmount = (subtotal+taxAmount)-discountAmount;
@@ -1847,10 +1862,6 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         }
 
         System.out.println("Total Subtotal = "+subtotal);
-
-
-
-
     }
     /* Load cart sumTotal End */
 
@@ -2141,7 +2152,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
 
     private void notifycartAdapter() {
         posItemsData.clear();
-        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData);
+        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData,posCartDesignRecView);
 
         posCartDesignRecView.setLayoutManager(new LinearLayoutManager(this));
         posCartDesignRecView.setAdapter(cartAdapter);
@@ -2159,7 +2170,7 @@ public class PosActivity extends AppCompatActivity  implements LabelledSpinner.O
         discountType=0;
         discuntRate=0.00;
         paymentID=0;
-        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData);
+        PosItemAdapter cartAdapter = new PosItemAdapter(this,posItemsData,posCartDesignRecView);
         posCartDesignRecView.setLayoutManager(new LinearLayoutManager(this));
         posCartDesignRecView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();

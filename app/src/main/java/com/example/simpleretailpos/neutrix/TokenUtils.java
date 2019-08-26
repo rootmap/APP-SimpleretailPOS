@@ -314,14 +314,20 @@ public class TokenUtils {
     }
 
     public void connectInternet(){
-        SetToast(context,"Please connect internet !!!");
+        SetToast(context,"Please connect/check your internet connection !!!");
         setStr("redirect_login","true");
         LoginLink(context);
     }
 
     public void checkUnauthenticated(String s){
         System.out.println("checkUnauthenticated String / JSON = "+s);
-        JSONObject row=perseJSONArray(s);
+        JSONObject row=null;
+        try{
+            row=perseJSONArray(s);
+        }catch (Exception e){
+            connectInternet();
+        }
+
         try {
             String dft=null;
             try{
